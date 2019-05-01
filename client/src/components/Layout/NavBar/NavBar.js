@@ -50,10 +50,7 @@ const links = {
     text: 'Sell'
   },
   rental:{
-    text: 'Rental'
-  },
-  list:{
-    text: 'List'
+    text: 'List Rental'
   },
 }
 class NavBar extends Component {
@@ -94,9 +91,6 @@ class NavBar extends Component {
           </RightLinksComponent>
           <RightLinksComponent>
               {links.rental.text}
-          </RightLinksComponent>
-          <RightLinksComponent>
-            {links.list.text}
           </RightLinksComponent>
         </NavBarLinkComponent>
 
@@ -156,9 +150,6 @@ class NavBar extends Component {
         </Link>
         <Link>
           {links.sell.text}
-        </Link>
-        <Link>
-          {links.list.text}
         </Link>
         <Link>
           {links.rental.text}
