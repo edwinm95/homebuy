@@ -33,13 +33,14 @@ const SearchComponent = styled.div`
   position: absolute;
   left: 28%;
   border-width: 0px;
+  cursor: pointer;
   @media only screen and ${maxDeviceWidth.tablet} {
     width: 90%;
     left:5%;
   }
 `
 const SearchTextBox = styled.input`
-  width: 90%;
+  width: 100%;
   height: 100%;
   float: left;
   font-size: 16px;
@@ -47,18 +48,23 @@ const SearchTextBox = styled.input`
   -moz-box-sizing:border-box;
   box-sizing:border-box;
   border: 0px;
+  cursor: pointer;
   padding: 10px;
+  @media only screen and ${maxDeviceWidth.tablet} {
+    font-size: 14px;
+  }
 `
 const SearchButton = styled.button`
-  height: 100%;
-  width: 10%;
-  float: left;
-  border-radius: 0;
+  height: 90%;
+  margin: 2px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 2px;
   font-size: 20px;
   padding: 5px;
   border: 0px;
   color: green;
-  text-align: center;
   background-color: white;
 `
 class Home extends Component {
