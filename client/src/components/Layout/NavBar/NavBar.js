@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import {maxDeviceWidth} from '../../DeviceLayout'
 import {size} from '../../DeviceLayout'
 import MediaQuery from 'react-responsive'
+import SignUp from '../../Modal/SignUp'
+import {Link} from 'react-router-dom'
 const NavBarComponent = styled.div`
     width: 100%;
     height: 60px;
@@ -10,8 +12,7 @@ const NavBarComponent = styled.div`
 `
 const NavBarLinkComponent = styled.div`
   float: left;
-  font-size: 20px;
-  font-weight: 300;
+  font-size: 16px;
   width: 33.33%
 `
 const LeftLinkComponent = styled.div`
@@ -50,10 +51,7 @@ const links = {
     text: 'Sell'
   },
   rental:{
-    text: 'Rental'
-  },
-  list:{
-    text: 'List'
+    text: 'List Rental'
   },
 }
 class NavBar extends Component {
@@ -61,11 +59,35 @@ class NavBar extends Component {
     super(props)
     this.state = {
       width: '0',
-      display: 'none'
+      display: 'none',
+      showLoginSignUp: false,
     }
     this.renderDrawer = this.renderDrawer.bind(this);
     this.showDrawer = this.showDrawer.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
+    this.showLoginSignupModal = this.showLoginSignupModal.bind(this)
+    this.renderLoginSignUp = this.renderLoginSignUp.bind(this);
+    this.closeLoginSignupModal = this.closeLoginSignupModal.bind(this);
+  }
+  showLoginSignupModal(){
+    this.setState({showLoginSignUp: true})
+  }
+  closeLoginSignupModal(){
+    this.setState({showLoginSignUp: false})
+  }
+  renderLoginSignUp(){
+    const {showLoginSignUp} = this.state
+    if(showLoginSignUp){
+      return(
+        <SignUp close={this.closeLoginSignupModal}/>
+      )
+    }
+
+    return(
+      <div>
+      
+      </div>
+    )
   }
   renderDesktopNavBar(){
     return(
@@ -86,7 +108,7 @@ class NavBar extends Component {
         </NavBarLinkComponent>
 
         <NavBarLinkComponent>
-          <RightLinksComponent>
+          <RightLinksComponent onClick={() => this.showLoginSignupModal()}>
               {links.login_signup.text}
           </RightLinksComponent>
           <RightLinksComponent>
@@ -94,9 +116,6 @@ class NavBar extends Component {
           </RightLinksComponent>
           <RightLinksComponent>
               {links.rental.text}
-          </RightLinksComponent>
-          <RightLinksComponent>
-            {links.list.text}
           </RightLinksComponent>
         </NavBarLinkComponent>
 
@@ -127,12 +146,13 @@ class NavBar extends Component {
     background-color: white;
     width: ${this.state.width};
   `
-  const Link = styled.div`
+  const DrawerLink = styled.div`
     margin: 10px 0;
     padding: 5px;
     border-bottom: 1px solid black;
     font-size: 18px;
     cursor: pointer;
+    text-decoration: none;
   `
   const CloseButton = styled.div`
     position: absolute;
@@ -145,27 +165,24 @@ class NavBar extends Component {
   return(
     <DrawerComponent>
       <Drawer>
-        <Link>
-          {links.login_signup.text}
-        </Link>
-        <Link>
+        <DrawerLink>
+          <Link style={{textDecoration: 'none', color: 'black'}} to='/signup' onClick={() => this.closeDrawer()} >{links.login_signup.text}</Link>
+        </DrawerLink>
+        <DrawerLink>
           {links.buy.text}
-        </Link>
-        <Link>
+        </DrawerLink>
+        <DrawerLink>
           {links.rent.text}
-        </Link>
-        <Link>
+        </DrawerLink>
+        <DrawerLink>
           {links.sell.text}
-        </Link>
-        <Link>
-          {links.list.text}
-        </Link>
-        <Link>
+        </DrawerLink>
+        <DrawerLink>
           {links.rental.text}
-        </Link>
+        </DrawerLink>
       </Drawer>
       <CloseButton>
-        <i class="fal fa-times" onClick={() => this.closeDrawer()}></i>
+        <i class="fal fa-times"></i>
       </CloseButton>
     </DrawerComponent>
   )
@@ -198,6 +215,7 @@ class NavBar extends Component {
         <MediaQuery minDeviceWidth={size.laptop}>
           {this.renderDesktopNavBar()}
         </MediaQuery>
+        {this.renderLoginSignUp()}
       </div>
     )
   }

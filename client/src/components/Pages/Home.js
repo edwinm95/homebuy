@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import MainImage from '../../assets/images/yellowDoor.jpg'
+import MainImage from '../../assets/images/boston.jpg'
 import {maxDeviceWidth} from '../DeviceLayout'
 const HomeImage = styled.div`
     width: 100%;
     height: 600px;
-    background: linear-gradient( rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8) ), url('${MainImage}');
+    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('${MainImage}');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -18,6 +18,7 @@ const Title = styled.h1`
   text-align: center;
   font-size: 60px;
   top: 15%;
+  font-family: 'Playfair Display', serif;
   color: white;
   @media only screen and ${maxDeviceWidth.tablet} {
     font-size: 30px;
