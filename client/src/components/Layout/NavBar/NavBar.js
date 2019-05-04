@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import {maxDeviceWidth} from '../../DeviceLayout'
 import {size} from '../../DeviceLayout'
 import MediaQuery from 'react-responsive'
+import Login_SignUp from '../../Modal/Login_SignUp'
+
 const NavBarComponent = styled.div`
     width: 100%;
     height: 60px;
@@ -10,8 +12,7 @@ const NavBarComponent = styled.div`
 `
 const NavBarLinkComponent = styled.div`
   float: left;
-  font-size: 20px;
-  font-weight: 300;
+  font-size: 16px;
   width: 33.33%
 `
 const LeftLinkComponent = styled.div`
@@ -58,11 +59,35 @@ class NavBar extends Component {
     super(props)
     this.state = {
       width: '0',
-      display: 'none'
+      display: 'none',
+      showLoginSignUp: false,
     }
     this.renderDrawer = this.renderDrawer.bind(this);
     this.showDrawer = this.showDrawer.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
+    this.showLoginSignupModal = this.showLoginSignupModal.bind(this)
+    this.renderLoginSignUp = this.renderLoginSignUp.bind(this);
+    this.closeLoginSignupModal = this.closeLoginSignupModal.bind(this);
+  }
+  showLoginSignupModal(){
+    this.setState({showLoginSignUp: true})
+  }
+  closeLoginSignupModal(){
+    this.setState({showLoginSignUp: false})
+  }
+  renderLoginSignUp(){
+    const {showLoginSignUp} = this.state
+    if(showLoginSignUp){
+      return(
+        <Login_SignUp close={this.closeLoginSignupModal}/>
+      )
+    }
+
+    return(
+      <div>
+      
+      </div>
+    )
   }
   renderDesktopNavBar(){
     return(
@@ -83,7 +108,7 @@ class NavBar extends Component {
         </NavBarLinkComponent>
 
         <NavBarLinkComponent>
-          <RightLinksComponent>
+          <RightLinksComponent onClick={() => this.showLoginSignupModal()}>
               {links.login_signup.text}
           </RightLinksComponent>
           <RightLinksComponent>
@@ -189,6 +214,7 @@ class NavBar extends Component {
         <MediaQuery minDeviceWidth={size.laptop}>
           {this.renderDesktopNavBar()}
         </MediaQuery>
+        {this.renderLoginSignUp()}
       </div>
     )
   }
