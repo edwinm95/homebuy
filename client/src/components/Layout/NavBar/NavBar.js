@@ -9,6 +9,7 @@ const NavBarComponent = styled.div`
     width: 100%;
     height: 60px;
     margin: auto;
+    border-bottom: 1px solid #ccc;
 `
 const NavBarLinkComponent = styled.div`
   float: left;

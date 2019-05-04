@@ -110,8 +110,7 @@ const ForgotPassword = styled.div`
                 <InputComponent>
                     <UserNameInput type="text" placeholder="Enter email"/>
                     <PasswordInput type="text" placeholder="Create password"/>
-                    <SubmitButton>Submit</SubmitButton>
-                    <ForgotPassword>Forgot Password ?</ForgotPassword>
+                    <SubmitButton>Create Account</SubmitButton>
                 </InputComponent>
             </div>
           )
