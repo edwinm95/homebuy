@@ -44,10 +44,9 @@ const PageContent = styled.div`
     width: 30%;
     position: absolute;
     left: 35%;
-    top: 2%;
+    top: 15%;
     background-color: white;
     border: 0.5px solid #2A2A33;
-    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
     @media only screen and ${maxDeviceWidth.laptop} {
         width: 50%;
         left: 25%;

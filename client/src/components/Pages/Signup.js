@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-
-export default class Signup extends Component {
+import SignUpLayout from '../Layout/SignUp/SignUp'
+class Signup extends Component {
   render() {
     return (
       <div>
-        
+        <SignUpLayout modal={false}/>
       </div>
     )
   }
 }
+export default Signup

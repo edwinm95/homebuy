@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import LoginSignUpform from '../Forms/Login_SignUp/form'
-import {maxDeviceWidth} from '../DeviceLayout'
 import SignUp from '../Layout/SignUp/SignUp'
 const ModalBackground = styled.div`
     width: 100%;
@@ -12,7 +10,7 @@ const ModalBackground = styled.div`
     top: 0;
     left: 0;
 `
-class Login_SignUp extends Component {
+class SignUpModal extends Component {
   constructor(props){
       super(props)
       this.state = {
@@ -32,4 +30,4 @@ class Login_SignUp extends Component {
   }
 }
 
-export default Login_SignUp
+export default SignUpModal

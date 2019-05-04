@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import {maxDeviceWidth} from '../../DeviceLayout'
 import {size} from '../../DeviceLayout'
 import MediaQuery from 'react-responsive'
-import Login_SignUp from '../../Modal/Login_SignUp'
-
+import SignUp from '../../Modal/SignUp'
+import {Link} from 'react-router-dom'
 const NavBarComponent = styled.div`
     width: 100%;
     height: 60px;
@@ -79,7 +79,7 @@ class NavBar extends Component {
     const {showLoginSignUp} = this.state
     if(showLoginSignUp){
       return(
-        <Login_SignUp close={this.closeLoginSignupModal}/>
+        <SignUp close={this.closeLoginSignupModal}/>
       )
     }
 
@@ -146,12 +146,13 @@ class NavBar extends Component {
     background-color: white;
     width: ${this.state.width};
   `
-  const Link = styled.div`
+  const DrawerLink = styled.div`
     margin: 10px 0;
     padding: 5px;
     border-bottom: 1px solid black;
     font-size: 18px;
     cursor: pointer;
+    text-decoration: none;
   `
   const CloseButton = styled.div`
     position: absolute;
@@ -164,24 +165,24 @@ class NavBar extends Component {
   return(
     <DrawerComponent>
       <Drawer>
-        <Link>
-          {links.login_signup.text}
-        </Link>
-        <Link>
+        <DrawerLink>
+          <Link style={{textDecoration: 'none', color: 'black'}} to='/signup' onClick={() => this.closeDrawer()} >{links.login_signup.text}</Link>
+        </DrawerLink>
+        <DrawerLink>
           {links.buy.text}
-        </Link>
-        <Link>
+        </DrawerLink>
+        <DrawerLink>
           {links.rent.text}
-        </Link>
-        <Link>
+        </DrawerLink>
+        <DrawerLink>
           {links.sell.text}
-        </Link>
-        <Link>
+        </DrawerLink>
+        <DrawerLink>
           {links.rental.text}
-        </Link>
+        </DrawerLink>
       </Drawer>
       <CloseButton>
-        <i class="fal fa-times" onClick={() => this.closeDrawer()}></i>
+        <i class="fal fa-times"></i>
       </CloseButton>
     </DrawerComponent>
   )
