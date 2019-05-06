@@ -1,36 +1,76 @@
-var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-
-
+const graphqlHttp = require('express-graphql')
+const { buildSchema } = require('graphql')
+const mongoose = require('mongoose')
 var app = express();
+var keys = require('./config/keys')
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true})
+//GraphQL
+app.use('/graphql',graphqlHttp({
+  schema: buildSchema(`
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+      type Property {
+        _id: ID!
+        title: String!
+        address: String!
+        price: Float!
+        date: String!
+        beds: String!
+        baths: String!
+        squareFeet: String!
+        leaseterms: String!
+        description: String!
+        contactInfo: String!
+        Amenities: String!
+        Photos: String!
+        showingAvaliability: String!
+      }
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+      input PropertyInput {
+        _id: ID!
+        title: String!
+        address: String!
+        price: Float!
+        date: String!
+        beds: String!
+        baths: String!
+        squareFeet: String!
+        leaseterms: String!
+        description: String!
+        contactInfo: String!
+        Amenities: String!
+        Photos: String!
+        showingAvaliability: String!
+      }
+
+      type RootQuery {
+          properties: [Property!]!
+      }
+      type RootMutation {
+          createProperty(propertyInput: PropertyInput): Property
+      }
+      schema {
+          query: RootQuery
+          mutation: RootMutation
+      }
+  `),
+  rootValue: {
+    properties: () => {
+        return['New York', 'Los Angeles']
+    },
+    createProperty: (args) => {
+      const propertyName = args.name;
+      return propertyName;
+    }
+  },
+  graphiql: true
+}))
+
 
 module.exports = app;
