@@ -28,6 +28,12 @@ module.exports = buildSchema(`
         propertiesOwned: [Property]
       }
 
+      type AuthData {
+        userId: ID!
+        token: String
+        tokenExpiration: Int!
+      }
+
       input PropertyInput {
         title: String!
         description: String!
@@ -46,6 +52,7 @@ module.exports = buildSchema(`
       type RootQuery {
           properties: [Property!]!
           users: [User!]!
+          login(username: String!, password: String!): AuthData!
       }
       type RootMutation {
           createProperty(propertyInput: PropertyInput): Property

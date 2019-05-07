@@ -6,6 +6,7 @@ var app = express();
 var keys = require('./config/keys')
 const schema = require('./graphql/schema')
 const resolvers = require('./graphql/resolvers')
+const isAuth = require('./middleware/is-auth')
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -13,6 +14,7 @@ app.use(cookieParser());
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true})
 //GraphQL
+app.use(isAuth)
 app.use('/graphql',graphqlHttp({
   schema,
   rootValue: resolvers,

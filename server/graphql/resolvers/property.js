@@ -6,7 +6,8 @@ module.exports = {
           throw err
         })
         },
-        createProperty: (args) => {
+        createProperty: (args,req) => {
+            
         const{ title, description, date} = args.propertyInput
         const property = new Property({
             title,
