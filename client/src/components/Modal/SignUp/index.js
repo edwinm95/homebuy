@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import SignUp from '../Layout/SignUp/SignUp'
+import SignUp from '../../Layout/SignUp'
 const ModalBackground = styled.div`
     width: 100%;
     height: 100%;

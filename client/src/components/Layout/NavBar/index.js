@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {maxDeviceWidth} from '../../DeviceLayout'
 import {size} from '../../DeviceLayout'
 import MediaQuery from 'react-responsive'
-import SignUp from '../../Modal/SignUp'
+import SignUp from '../../Modal/SignUp/'
 import {Link} from 'react-router-dom'
 const NavBarComponent = styled.div`
     width: 100%;
