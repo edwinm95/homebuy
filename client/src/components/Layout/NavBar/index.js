@@ -4,7 +4,7 @@ import {maxDeviceWidth} from '../../DeviceLayout'
 import {size} from '../../DeviceLayout'
 import MediaQuery from 'react-responsive'
 import SignUp from '../../Modal/SignUp/'
-import {Link} from 'react-router-dom'
+import {Link, NavLink} from 'react-router-dom'
 const NavBarComponent = styled.div`
     width: 100%;
     height: 60px;
@@ -95,16 +95,16 @@ class NavBar extends Component {
       <NavBarComponent>
         <NavBarLinkComponent>
           <LeftLinkComponent>
-            {links.buy.text}
+            <NavLink to="/buy" style={{textDecoration: 'none', color: 'black'}}>{links.buy.text}</NavLink>
           </LeftLinkComponent>
           <LeftLinkComponent>
-            {links.rent.text}
+            <NavLink to="/rent" style={{textDecoration: 'none', color: 'black'}}>{links.rent.text}</NavLink>
           </LeftLinkComponent>
         </NavBarLinkComponent>
 
         <NavBarLinkComponent>
           <Logo>
-            {links.logo.text}
+            <NavLink to="/" style={{textDecoration: 'none', color: 'black'}}>{links.logo.text}</NavLink>
           </Logo>
         </NavBarLinkComponent>
 
@@ -113,10 +113,10 @@ class NavBar extends Component {
               {links.login_signup.text}
           </RightLinksComponent>
           <RightLinksComponent>
-              {links.sell.text}
+              <NavLink to="/sell" style={{textDecoration: 'none', color: 'black'}}>{links.sell.text}</NavLink>
           </RightLinksComponent>
           <RightLinksComponent>
-              {links.rental.text}
+              <NavLink to="/listrental" style={{textDecoration: 'none', color: 'black'}}>{links.rental.text}</NavLink>
           </RightLinksComponent>
         </NavBarLinkComponent>
 
