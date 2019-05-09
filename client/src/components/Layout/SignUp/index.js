@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import LoginSignUpform from '../../Forms/Login_SignUp/form'
+import LoginSignUpform from '../../Forms/Login_SignUp'
 import {maxDeviceWidth, minDeviceWidth} from '../../DeviceLayout'
 const TitleComponent = styled.div`
     width: 90%;

@@ -21,7 +21,6 @@ module.exports = buildSchema(`
         _id: ID!
         facebookID: String
         googleID: String
-        username: String!
         password: String
         email: String!
         userphoto: String
@@ -42,7 +41,6 @@ module.exports = buildSchema(`
       input UserInput {
         facebookID: String
         googleID: String
-        username: String!
         password: String!
         email: String!
         userphoto: String
@@ -52,7 +50,7 @@ module.exports = buildSchema(`
       type RootQuery {
           properties: [Property!]!
           users: [User!]!
-          login(username: String!, password: String!): AuthData!
+          login(email: String!, password: String!): AuthData!
       }
       type RootMutation {
           createProperty(propertyInput: PropertyInput): Property
