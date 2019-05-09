@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import MainImage from '../../assets/images/boston.jpg'
+import {connect} from 'react-redux'
 import {maxDeviceWidth} from '../DeviceLayout'
 const HomeImage = styled.div`
     width: 100%;
@@ -70,6 +71,7 @@ const SearchButton = styled.button`
 `
 class Home extends Component {
   render() {
+    console.log('Token is ',this.props.token)
     return (
      <HomeImage>
         <Title>Find the Perfect Home</Title>
@@ -83,4 +85,9 @@ class Home extends Component {
     )
   }
 }
-export default Home
+const mapStateToProps = (state) => {
+  return {
+    token: state.token
+  }
+}
+export default connect(mapStateToProps)(Home)

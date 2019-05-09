@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-
+import {connect} from 'react-redux'
+import * as tokenActions from '../../../actions/token/'
 const LinkComponent = styled.div`
     clear: both;
     width: 90%;
@@ -149,6 +150,9 @@ const ForgotPassword = styled.div`
             console.log(errors)
         }else{
             console.log(data)
+            const {token} = data.login
+            this.props.addToken(token)
+            localStorage.setItem("token", token)
         }
       }catch(error){
           throw error
@@ -378,4 +382,4 @@ const ForgotPassword = styled.div`
     )
   }
 }
-export default form
+export default connect(null,tokenActions)(form)
