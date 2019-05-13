@@ -71,14 +71,13 @@ const SearchButton = styled.button`
 `
 class Home extends Component {
   render() {
-    console.log('Token is ',this.props.token)
     return (
      <HomeImage>
         <Title>Find the Perfect Home</Title>
         <SearchComponent>
           <SearchTextBox type='text' placeholder='Enter an address, neighborhood, city, or ZIP code' />
           <SearchButton>
-            <i class="fal fa-search"></i>
+            <i className="fal fa-search"></i>
           </SearchButton>
         </SearchComponent>
       </HomeImage>

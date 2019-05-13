@@ -24,11 +24,12 @@ app.use((req,res,next) => {
   next()
 })
 app.use(isAuth)
-app.use('/graphql',graphqlHttp({
-  schema,
-  rootValue: resolvers,
-  graphiql: false
-}))
+app.use('/graphql',
+  graphqlHttp({
+    schema,
+    rootValue: resolvers,
+    graphiql: false
+  }))
 
 
 module.exports = app;

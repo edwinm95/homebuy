@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import {maxDeviceWidth} from '../../DeviceLayout'
+import {connect} from 'react-redux'
 import {size} from '../../DeviceLayout'
 import MediaQuery from 'react-responsive'
 import SignUp from '../../Modal/SignUp/'
 import {Link, NavLink} from 'react-router-dom'
+import * as actions from '../../../actions/token/'
+import './navbar.css'
 const NavBarComponent = styled.div`
     width: 100%;
     height: 60px;
@@ -20,6 +22,9 @@ const LeftLinkComponent = styled.div`
   cursor: pointer;
   display: inline-block;
   margin: 20px 10px;
+  :hover{
+    color: green
+  }
 `
 const Logo = styled.div`
   cursor: pointer;
@@ -34,6 +39,9 @@ const RightLinksComponent = styled.div`
   display: inline-block;
   margin: 20px 10px;
   float: right
+  :hover{
+    color: green;
+  }
 `
 const links = {
   buy:{
@@ -47,6 +55,9 @@ const links = {
   },
   login_signup:{
     text:`Login/SignUp`
+  },
+  my_account:{
+    text: 'My Account'
   },
   sell:{
     text: 'Sell'
@@ -62,6 +73,7 @@ class NavBar extends Component {
       width: '0',
       display: 'none',
       showLoginSignUp: false,
+      showAccountSubMenu: false
     }
     this.renderDrawer = this.renderDrawer.bind(this);
     this.showDrawer = this.showDrawer.bind(this);
@@ -69,6 +81,12 @@ class NavBar extends Component {
     this.showLoginSignupModal = this.showLoginSignupModal.bind(this)
     this.renderLoginSignUp = this.renderLoginSignUp.bind(this);
     this.closeLoginSignupModal = this.closeLoginSignupModal.bind(this);
+  }
+  showSubMenu = () => {
+    this.setState({showAccountSubMenu: true})
+  }
+  hideSubMenu = () => {
+    this.setState({showAccountSubMenu: false})
   }
   showLoginSignupModal(){
     this.setState({showLoginSignUp: true})
@@ -80,7 +98,7 @@ class NavBar extends Component {
     const {showLoginSignUp} = this.state
     if(showLoginSignUp){
       return(
-        <SignUp close={this.closeLoginSignupModal}/>
+        <SignUp close={this.closeLoginSignupModal} modal/>
       )
     }
 
@@ -90,33 +108,67 @@ class NavBar extends Component {
       </div>
     )
   }
+  signout = () => {
+    this.props.removeToken()
+    window.location.reload()
+  }
+  renderAccountSubmenu(){
+    const SubMenuComponent = styled.div`
+      position: fixed;
+      right: 0;
+      top: 4.2em;
+      border: 0.5px solid #ccc;
+      margin: auto;
+      width: 20%;
+      background-color: white;
+    `
+    const Links = styled.div`
+      margin: 1em;
+      padding: 5px;
+      cursor: pointer;
+      :hover{
+        color: green;
+      }
+    `
+    return(
+      <SubMenuComponent onMouseLeave={this.hideSubMenu}>
+        <Links><a href ="/myproperties" className="links">My Properties</a></Links>
+        <Links><a href="/settings" className="links">Settings</a></Links>
+        <Links onClick={this.signout}>Sign out</Links>
+      </SubMenuComponent>
+    )
+  }
   renderDesktopNavBar(){
     return(
       <NavBarComponent>
         <NavBarLinkComponent>
           <LeftLinkComponent>
-            <NavLink to="/buy" style={{textDecoration: 'none', color: 'black'}}>{links.buy.text}</NavLink>
+            <a href="/buy" className="links">{links.buy.text}</a>
           </LeftLinkComponent>
           <LeftLinkComponent>
-            <NavLink to="/rent" style={{textDecoration: 'none', color: 'black'}}>{links.rent.text}</NavLink>
+            <a href="/rent"  className="links">{links.rent.text}</a>
           </LeftLinkComponent>
         </NavBarLinkComponent>
 
         <NavBarLinkComponent>
           <Logo>
-            <NavLink to="/" style={{textDecoration: 'none', color: 'black'}}>{links.logo.text}</NavLink>
+            <a href="/" className="logo">{links.logo.text}</a>
           </Logo>
         </NavBarLinkComponent>
 
-        <NavBarLinkComponent>
-          <RightLinksComponent onClick={() => this.showLoginSignupModal()}>
-              {links.login_signup.text}
+        <NavBarLinkComponent >
+          <RightLinksComponent>
+            {this.props.token ? (<a href="/myaccount" onMouseEnter={this.showSubMenu} className="links">{links.my_account.text}</a>): 
+                (<a onClick={() => this.showLoginSignupModal()} className="links">{links.login_signup.text}</a>)
+                }
           </RightLinksComponent>
           <RightLinksComponent>
-              <NavLink to="/sell" style={{textDecoration: 'none', color: 'black'}}>{links.sell.text}</NavLink>
+              {this.props.token ? (<a href ="/sell"  className="links">{links.sell.text}</a>): 
+              (<a className="links" onClick={() => this.showLoginSignupModal()} >{links.sell.text}</a>)
+              }
           </RightLinksComponent>
           <RightLinksComponent>
-              <NavLink to="/listrental" style={{textDecoration: 'none', color: 'black'}}>{links.rental.text}</NavLink>
+              <a href="/listrental" className="links">{links.rental.text}</a>
           </RightLinksComponent>
         </NavBarLinkComponent>
 
@@ -167,7 +219,7 @@ class NavBar extends Component {
     <DrawerComponent>
       <Drawer>
         <DrawerLink>
-          <Link style={{textDecoration: 'none', color: 'black'}} to='/signup' onClick={() => this.closeDrawer()} >{links.login_signup.text}</Link>
+          <a style={{textDecoration: 'none', color: 'black'}} href='/signup' onClick={this.closeDrawer} >{links.login_signup.text}</a>
         </DrawerLink>
         <DrawerLink>
           {links.buy.text}
@@ -183,7 +235,7 @@ class NavBar extends Component {
         </DrawerLink>
       </Drawer>
       <CloseButton>
-        <i class="fal fa-times"></i>
+        <i class="fal fa-times" onClick={this.closeDrawer}></i>
       </CloseButton>
     </DrawerComponent>
   )
@@ -215,10 +267,14 @@ class NavBar extends Component {
         </MediaQuery>
         <MediaQuery minDeviceWidth={size.laptop}>
           {this.renderDesktopNavBar()}
+          {this.state.showAccountSubMenu && (this.renderAccountSubmenu())} 
         </MediaQuery>
         {this.renderLoginSignUp()}
       </div>
     )
   }
 }
-export default NavBar
+const mapStateToProps = (state) => {
+  return {token: state.token}
+}
+export default connect(mapStateToProps,actions)(NavBar)

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import {connect} from 'react-redux'
 import * as tokenActions from '../../../actions/token/'
+import { Redirect } from 'react-router-dom'
 const LinkComponent = styled.div`
     clear: both;
     width: 90%;
@@ -25,17 +26,6 @@ const SignUpLink = styled.h2`
 const InputComponent = styled.div`
     margin: 20px auto;
     width: 90%;
-`
-const UserNameInput = styled.input`
-    width:100%;
-    height: 40px
-    margin: 5px 0;
-    font-size: 18px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    padding: 10px;
-    border: 1px solid #ccc;
 `
 const Error = styled.div`
     width: 100%;
@@ -149,10 +139,9 @@ const ForgotPassword = styled.div`
         if(errors){
             console.log(errors)
         }else{
-            console.log(data)
             const {token} = data.login
             this.props.addToken(token)
-            localStorage.setItem("token", token)
+            window.location.reload()
         }
       }catch(error){
           throw error
@@ -221,9 +210,9 @@ const ForgotPassword = styled.div`
     }
 
   validateEmail(event){
-      const emailRegEx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      const emailRegEx = /^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       const email = event.currentTarget.value
-      if(!emailRegEx.test(email) || email.length == 0){
+      if(!emailRegEx.test(email) || email.length === 0){
           if(!this.state.error.email.showError){
               this.setState({
                   email,

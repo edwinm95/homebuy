@@ -1,0 +1,15 @@
+.logo{
+  color: green;
+}
+.logo:hover{
+    color: #6FB76F;
+}
+a {
+    text-decoration: none;
+}
+.links{
+    color: black;
+}
+.links:hover{
+    color: green;
+}

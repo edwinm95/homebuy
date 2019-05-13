@@ -1,6 +1,5 @@
 const { buildSchema } = require('graphql')
 module.exports = buildSchema(`
-
       type Property {
         _id: ID!
         title: String!
@@ -22,6 +21,9 @@ module.exports = buildSchema(`
         facebookID: String
         googleID: String
         password: String
+        firstname: String
+        lastname: String
+        username: String
         email: String!
         userphoto: String
         propertiesOwned: [Property]
@@ -51,6 +53,8 @@ module.exports = buildSchema(`
           properties: [Property!]!
           users: [User!]!
           login(email: String!, password: String!): AuthData!
+          refreshToken: AuthData!
+          getUser: User!
       }
       type RootMutation {
           createProperty(propertyInput: PropertyInput): Property

@@ -15,6 +15,15 @@ const userSchema = new Schema ({
         type: String,
         required: true
     },
+    firstname: {
+        type: String
+    },
+    lastname: {
+        type: String
+    },
+    username: {
+        type: String
+    },
     userphoto:{
         type: String
     },

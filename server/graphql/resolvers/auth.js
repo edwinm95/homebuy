@@ -33,8 +33,25 @@ module.exports = {
             throw new Error('Password is invalid')
         }
         const token = await jwt.sign({userId: user.id, email: user.email},'secretkey',{
-            expiresIn: '1h'
+            expiresIn: 60 * 60
         })
         return {userId: user.id, token: token, tokenExpiration: 1}
+    },
+    refreshToken: async (args, req) => {
+        try{
+            if(req.isAuth){
+                const { userId } = req
+                const user = await User.findById(userId)
+                const token = await jwt.sign({userId: user.id, email: user.email},'secretkey',{
+                    expiresIn: 60 * 60
+                })
+                console.log(token)
+                return {userId, token, tokenExpiration: 1}  
+            }else{
+                throw new Error('User not authenticated')
+            }
+        }catch(error){
+            throw error
+        }
     }
 }

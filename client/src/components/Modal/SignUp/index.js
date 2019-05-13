@@ -24,7 +24,7 @@ class SignUpModal extends Component {
   render() {
     return (
       <ModalBackground>
-            <SignUp modal={true} close={this.closeModal} />
+            <SignUp modal close={this.closeModal} />
       </ModalBackground>
     )
   }
