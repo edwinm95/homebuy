@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import SignUpLayout from '../Layout/SignUp/SignUp'
+import SignUpLayout from '../Layout/SignUp/'
 class Signup extends Component {
   render() {
     return (

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import MainImage from '../../assets/images/boston.jpg'
+import {connect} from 'react-redux'
 import {maxDeviceWidth} from '../DeviceLayout'
 const HomeImage = styled.div`
     width: 100%;
@@ -76,11 +77,16 @@ class Home extends Component {
         <SearchComponent>
           <SearchTextBox type='text' placeholder='Enter an address, neighborhood, city, or ZIP code' />
           <SearchButton>
-            <i class="fal fa-search"></i>
+            <i className="fal fa-search"></i>
           </SearchButton>
         </SearchComponent>
       </HomeImage>
     )
   }
 }
-export default Home
+const mapStateToProps = (state) => {
+  return {
+    token: state.token
+  }
+}
+export default connect(mapStateToProps)(Home)

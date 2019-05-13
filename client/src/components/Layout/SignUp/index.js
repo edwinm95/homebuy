@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import LoginSignUpform from '../../Forms/Login_SignUp/form'
-import {maxDeviceWidth, minDeviceWidth} from '../../DeviceLayout'
+import LoginSignUpform from '../../Forms/Login_SignUp'
+import {maxDeviceWidth} from '../../DeviceLayout'
 const TitleComponent = styled.div`
     width: 90%;
     margin: auto;
@@ -107,7 +107,7 @@ export default class SignUp extends Component {
                     <CloseButton><i class="fal fa-times" onClick={() => this.props.close()}></i></CloseButton>
                 </TitleComponent>
                 <LoginSignUpform/>
-                <SocialLoginComponent>
+                <SocialLoginComponent close={() => this.props.close()}>
                     <SocialDesc>or connect with:</SocialDesc>
                     <SocialLogoComponent>
                         <FaceBookLogo><i class="fab fa-facebook-f"></i></FaceBookLogo>

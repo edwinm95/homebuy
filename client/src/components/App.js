@@ -1,21 +1,50 @@
 import React,{Component} from 'react'
-import NavBar from './Layout/NavBar/NavBar';
+import NavBar from './Layout/NavBar/';
 import Home from './Pages/Home'
+import {connect} from 'react-redux'
 import SignUp from './Pages/Signup'
-import {BrowserRouter as Router, Route} from 'react-router-dom'
+import Buy from './Pages/Buy'
+import Sell from './Pages/Sell'
+import Rent from './Pages/Rent'
+import ListRental from './Pages/ListRental'
+import MyAcoount from './Pages/MyAccount'
+import Settings from './Pages/Settings'
+import Properties from './Pages/Properties'
+import * as actions from '../actions/token'
+import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
 class App extends Component{
-    constructor(props){
-        super(props);
+    componentDidMount(){
+        if(this.props.token !== null){
+            this.props.refreshToken(this.props.token)
+        }
     }
     render(){
         return(
-
             <Router>
                 <NavBar/>
-                <Route path="/" exact component={Home}/>
-                <Route path="/signup" exact component={SignUp} />
+                <Switch>
+                    <Route path="/" exact component={Home}/>
+                    {this.props.token && (<Redirect from="/signup" to="/" />)}
+                    <Route path="/signup"  component={SignUp} />
+                    <Route path="/buy" component={Buy} />
+                    {!this.props.token && (<Redirect from="/sell" to="/" />)}
+                    <Route path="/sell" component={Sell} />
+                    <Route path="/rent" component={Rent} />
+                    {!this.props.token && (<Redirect from="/listrental" to="/" />)}
+                    <Route path="/listrental" component={ListRental} /> 
+                    {!this.props.token && (<Redirect from="/myaccount" to="/" />)}
+                    <Route path="/myaccount" component={MyAcoount} />
+                    <Route path="/settings" component={Settings} />
+                    <Route path="/myproperties" component={Properties} />
+                </Switch>
+
             </Router>
         )
     }
 }
-export default App
+const mapStateToProps = (state) => {
+    return {
+        token: state.token
+    }
+}
+export default connect(mapStateToProps,actions)(App)
