@@ -43,12 +43,21 @@ module.exports = buildSchema(`
       input UserInput {
         facebookID: String
         googleID: String
-        password: String!
+        password: String
         email: String!
+        firstname: String
+        lastname: String
+        username: String
         userphoto: String
+        category: String
+        title: String
+        industryProfressional: Boolean
+        buisnessName: String
+        buisnessAddress: String
+        buisnessCity: String
+        buisnessState: String
+        buisnessZIP: String
       }
-
-
       type RootQuery {
           properties: [Property!]!
           users: [User!]!
@@ -59,6 +68,7 @@ module.exports = buildSchema(`
       type RootMutation {
           createProperty(propertyInput: PropertyInput): Property
           createUser(userInput: UserInput): User
+          editUser(userInput: UserInput): Boolean
       }
       schema {
           query: RootQuery

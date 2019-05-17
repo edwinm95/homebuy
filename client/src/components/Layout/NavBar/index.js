@@ -121,6 +121,7 @@ class NavBar extends Component {
       margin: auto;
       width: 20%;
       background-color: white;
+      z-index: 1;
     `
     const Links = styled.div`
       margin: 1em;

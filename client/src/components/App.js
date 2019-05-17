@@ -7,7 +7,7 @@ import Buy from './Pages/Buy'
 import Sell from './Pages/Sell'
 import Rent from './Pages/Rent'
 import ListRental from './Pages/ListRental'
-import MyAcoount from './Pages/MyAccount'
+import MyAcoount from './Pages/MyAccount/'
 import Settings from './Pages/Settings'
 import Properties from './Pages/Properties'
 import * as actions from '../actions/token'
@@ -34,7 +34,9 @@ class App extends Component{
                     <Route path="/listrental" component={ListRental} /> 
                     {!this.props.token && (<Redirect from="/myaccount" to="/" />)}
                     <Route path="/myaccount" component={MyAcoount} />
+                    {!this.props.token && (<Redirect from="/settings" to="/" />)}
                     <Route path="/settings" component={Settings} />
+                    {!this.props.token && (<Redirect from="/settings" to="/" />)}
                     <Route path="/myproperties" component={Properties} />
                 </Switch>
 

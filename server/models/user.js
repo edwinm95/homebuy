@@ -15,6 +15,9 @@ const userSchema = new Schema ({
         type: String,
         required: true
     },
+    username:{
+        type:String
+    },
     firstname: {
         type: String
     },
@@ -26,6 +29,18 @@ const userSchema = new Schema ({
     },
     userphoto:{
         type: String
+    },
+    industryProfressional:{
+        type: Boolean
+    },
+    profressional: {
+        category: String,
+        title: String,
+        buisnessName: String,
+        buisnessAddress: String,
+        buisnessCity: String,
+        buisnessState: String,
+        buisnessZIP: String
     },
     propertiesOwned: [
         {

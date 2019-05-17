@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
+import {Link, Redirect} from 'react-router-dom'
+import './MyAccount.css'
 class MyAccount extends Component {
     state = {
         _id: null,
@@ -52,7 +54,33 @@ class MyAccount extends Component {
     render(){
         return(
             <div>
-                
+                {this.renderProfile()}
+            </div>
+        )
+    }
+    redirectToSettings(){
+        return <Redirect to="/settings"/>
+    }
+    renderProfile(){
+        return(
+            <div className="component">
+                <div className="profilepicturecomponent">
+                    <div className="profilepicture">
+                    </div>
+                </div>
+                <div className="usernamecomponent">
+                    <h1>John Doe</h1>
+                </div>
+                <div className="rightcomponent">
+                    <div className="editbuttoncomponent">
+                        <a className="editbutton" href="/settings">Edit</a>
+                    </div>
+                    <div className="userinfocomponent">
+                        <h3>Personal Information</h3>
+                        <p>Member Since: 04/03/2019</p>
+
+                    </div>
+                </div>
             </div>
         )
     }

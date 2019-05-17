@@ -45,7 +45,6 @@ module.exports = {
                 const token = await jwt.sign({userId: user.id, email: user.email},'secretkey',{
                     expiresIn: 60 * 60
                 })
-                console.log(token)
                 return {userId, token, tokenExpiration: 1}  
             }else{
                 throw new Error('User not authenticated')
