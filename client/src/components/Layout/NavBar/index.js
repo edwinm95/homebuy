@@ -12,6 +12,7 @@ const NavBarComponent = styled.div`
     height: 60px;
     margin: auto;
     border-bottom: 1px solid #ccc;
+    background-color: #FFFFFF;
 `
 const NavBarLinkComponent = styled.div`
   float: left;
