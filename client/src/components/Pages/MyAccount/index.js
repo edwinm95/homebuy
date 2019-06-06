@@ -1,7 +1,21 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import { connect } from 'react-redux'
 import {Link, Redirect} from 'react-router-dom'
 import './MyAccount.css'
+import { Query } from 'react-apollo'
+import gql from 'graphql-tag'
+const GET_USER = gql`
+    query GetUser {
+        getUser{
+            _id
+            firstname
+            lastname
+            username
+            email
+            userphoto
+        }
+    }
+`
 class MyAccount extends Component {
     state = {
         _id: null,
@@ -11,83 +25,39 @@ class MyAccount extends Component {
         email: null,
         userphoto: null
     }
-    componentDidMount(){
-        this.getUserInformation()
-    }
-    getUserInformation =  async () => {
-        const {token} = this.props
-        const requestBody = {
-            query: `
-                query {
-                    getUser{
-                        _id
-                        firstname
-                        lastname
-                        username
-                        email
-                        userphoto
-                    }
-                }
-            `
-        }
-        try{
-            const response = await fetch('http://localhost:5000/graphql', {
-                method: 'POST',
-                body: JSON.stringify(requestBody),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            const responseData = await response.json()
-            const {errors, data} = responseData
-            if(errors){
-                throw new Error(errors)
-            }else{
-                const {_id, firstname, lastname, username, email, userphoto} = data.getUser
-                this.setState({_id, firstname, lastname, username, email, userphoto})
-            }
-        }catch(error){
-            throw error
-        }
-    }
-    render(){
+    render() {
         return(
-            <div>
-                {this.renderProfile()}
-            </div>
-        )
-    }
-    redirectToSettings(){
-        return <Redirect to="/settings"/>
-    }
-    renderProfile(){
-        return(
-            <div className="component">
-                <div className="profilepicturecomponent">
-                    <div className="profilepicture">
-                    </div>
-                </div>
-                <div className="usernamecomponent">
-                    <h1>John Doe</h1>
-                </div>
-                <div className="rightcomponent">
-                    <div className="editbuttoncomponent">
-                        <a className="editbutton" href="/settings">Edit</a>
-                    </div>
-                    <div className="userinfocomponent">
-                        <h3>Personal Information</h3>
-                        <p>Member Since: 04/03/2019</p>
-
-                    </div>
-                </div>
-            </div>
+            <Query query={GET_USER}>
+            {({data,loading,error}) => {
+                    if(loading) return (<div></div>)
+                    if(error){
+                        console.log(error) 
+                        return (<Redirect to="/" />)
+                    } 
+                    const {_id, firstname, lastname, username, email, userphoto} = data.getUser
+                    return(
+                        <div className="component">
+                            <div className="profilepicturecomponent">
+                                <div className="profilepicture">
+                                </div>
+                            </div>
+                            <div className="usernamecomponent">
+                                <h1>{`${firstname} ${lastname}`}</h1>
+                            </div>
+                            <div className="rightcomponent">
+                            <div className="editbuttoncomponent">
+                                         <a className="editbutton" href="/settings">Edit</a>
+                                     </div>
+                                 <div className="userinfocomponent">
+                                     <h3>Personal Information</h3>
+                                     <p>Member Since: 04/03/2019</p>
+                                 </div>
+                            </div>
+                        </div>
+                    )
+            }}
+            </Query>
         )
     }
 }
-const mapStateToProps = state => {
-    return {
-        token: state.token
-    }
-}
-export default connect(mapStateToProps)(MyAccount)
+export default MyAccount

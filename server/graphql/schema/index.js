@@ -1,20 +1,28 @@
 const { buildSchema } = require('graphql')
 module.exports = buildSchema(`
+      scalar Upload
       type Property {
         _id: ID!
-        title: String!
-        address: String!
-        price: Float!
+        description: String!
         date: String!
+        address: String!
+        rent: Int!
+        securitydeposit: Int!
         beds: String!
         baths: String!
-        squareFeet: String!
+        squarefeet: Int!
+        leaseduration: String!
         leaseterms: String!
-        description: String!
-        contactInfo: String!
-        Amenities: String!
-        Photos: String!
-        showingAvaliability: String!
+        contactinfoname: String!
+        contactinfophone: String!
+        contactinfoemail: String!
+        contactinfoforrentby: String!
+        amenitiesoptional: [String]
+        amenitieslaundry: String!
+        amenitiespets: String!
+        photos: [String!]!
+        additionalamenities: [String]
+        createdBy: ID!
       }
       type User{
         _id: ID!
@@ -26,19 +34,46 @@ module.exports = buildSchema(`
         username: String
         email: String!
         userphoto: String
+        profressionalcategory: String
+        profressionaltitle: String
+        industryProfressional: Boolean!
+        buisnessname: String
+        buisnessaddress: String
+        buisnesscity: String
+        buisnessstate: String
+        buisnesszipcode: String
+        buisnessphone: String
+        buisnessfacebook: String
+        buisnesstwitter: String
+        buisnesslinkedin: String
+        buisnesswebsite: String
         propertiesOwned: [Property]
       }
-
       type AuthData {
         userId: ID!
         token: String
         tokenExpiration: Int!
       }
-
       input PropertyInput {
-        title: String!
-        description: String!
-        date: String!
+        description: String
+        address: String
+        date: String
+        rent: String
+        securitydeposit: String
+        beds: String
+        baths: String
+        squarefeet: String
+        leaseduration: String
+        leaseterms: String
+        contactinfoname: String
+        contactinfophone: String
+        contactinfoemail: String
+        contactinfoforrentby: String
+        amenitiesoptional: [String]
+        amenitieslaundry: String
+        amenitiespets: String
+        additionalamenities: [String]
+        photos: [Upload!]!
       }
       input UserInput {
         facebookID: String
@@ -48,27 +83,33 @@ module.exports = buildSchema(`
         firstname: String
         lastname: String
         username: String
-        userphoto: String
-        category: String
-        title: String
-        industryProfressional: Boolean
-        buisnessName: String
-        buisnessAddress: String
-        buisnessCity: String
-        buisnessState: String
-        buisnessZIP: String
+        userphoto: Upload
+        profressionalcategory: String
+        profressionaltitle: String
+        industryProfressional: Boolean!
+        buisnessname: String
+        buisnessaddress: String
+        buisnesscity: String
+        buisnessstate: String
+        buisnesszipcode: String
+        buisnessphone: String
+        buisnessfacebook: String
+        buisnesstwitter: String
+        buisnesslinkedin: String
+        buisnesswebsite: String
       }
       type RootQuery {
           properties: [Property!]!
           users: [User!]!
-          login(email: String!, password: String!): AuthData!
           refreshToken: AuthData!
           getUser: User!
       }
       type RootMutation {
-          createProperty(propertyInput: PropertyInput): Property
+          login(email: String!, password: String!): AuthData!
+          createProperty(propertyInput: PropertyInput): Boolean
           createUser(userInput: UserInput): User
           editUser(userInput: UserInput): Boolean
+          testPhoto(file: Upload!) : Boolean
       }
       schema {
           query: RootQuery

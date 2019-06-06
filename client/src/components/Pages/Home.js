@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import MainImage from '../../assets/images/boston.jpg'
 import {connect} from 'react-redux'
+import { googleAPI, tomtomAPI } from '../../config/keys'
 import {maxDeviceWidth} from '../DeviceLayout'
+import SearchAutoComplete from './SearchAutoComplete'
 const HomeImage = styled.div`
     width: 100%;
     height: 600px;
@@ -70,23 +72,55 @@ const SearchButton = styled.button`
   background-color: white;
 `
 class Home extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      latitude: null,
+      longitude: null
+    }
+  }
+  componentDidMount(){
+     navigator.geolocation.getCurrentPosition(this.getPosition)
+  }
+  getPosition = (position) => {
+    var {latitude, longitude} = position.coords
+    latitude = latitude.toFixed(2)
+    longitude = longitude.toFixed(2)
+    this.setState({latitude, longitude})
+  }
+  handleChange = async (event) => {
+    const {value} = event.currentTarget
+    const url = `https://api.tomtom.com/search/2/geocode/${value}.json?countrySet=US&lat=${this.state.latitude}&lon=${this.state.longitude}&key=${tomtomAPI}`
+    console.log(url)
+    const response = await fetch(url,{
+      method: 'GET',
+    })
+    const reader = await response.json()
+    const responseResults = reader.results
+    console.log(responseResults)
+    if(responseResults){
+      responseResults.forEach((data) => {
+        console.log(data.address.freeformAddress)
+      })
+    }
+
+  } 
   render() {
-    return (
-     <HomeImage>
-        <Title>Find the Perfect Home</Title>
-        <SearchComponent>
-          <SearchTextBox type='text' placeholder='Enter an address, neighborhood, city, or ZIP code' />
-          <SearchButton>
-            <i className="fal fa-search"></i>
-          </SearchButton>
-        </SearchComponent>
-      </HomeImage>
-    )
+    if(this.state.latitude && this.state.longitude){
+      return (
+        <HomeImage>
+           <Title>Welcome to Homebuy</Title>
+           <SearchComponent>
+             <SearchAutoComplete latitude={this.state.latitude} longitude={this.state.longitude} />
+             <SearchButton>
+               <i className="fal fa-search"></i>
+             </SearchButton>
+           </SearchComponent>
+         </HomeImage>
+       )
+    }else{
+      return<div></div>
+    }
   }
 }
-const mapStateToProps = (state) => {
-  return {
-    token: state.token
-  }
-}
-export default connect(mapStateToProps)(Home)
+export default Home

@@ -1,0 +1,11 @@
+.collectionfields {
+    font-size: 16px;
+    padding: 10px;
+}
+.collectionfields:hover{
+    background-color: #cccccc;
+}
+.collectionfieldcomponent{
+    background-color: white;
+    margin: auto;
+}
