@@ -12,6 +12,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-graphql": "^0.8.0",
+    "google-auth-library": "^4.2.0",
     "graphql": "^14.2.1",
     "graphql-upload": "^8.0.6",
     "http-errors": "~1.6.2",

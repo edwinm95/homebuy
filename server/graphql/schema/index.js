@@ -53,6 +53,7 @@ module.exports = buildSchema(`
         userId: ID!
         token: String
         tokenExpiration: Int!
+        googleUserFound: Boolean
       }
       input PropertyInput {
         description: String
@@ -78,6 +79,7 @@ module.exports = buildSchema(`
       input UserInput {
         facebookID: String
         googleID: String
+        googleToken: String
         password: String
         email: String!
         firstname: String
@@ -110,6 +112,8 @@ module.exports = buildSchema(`
           createUser(userInput: UserInput): User
           editUser(userInput: UserInput): Boolean
           testPhoto(file: Upload!) : Boolean
+          verifyGoogleToken(token: String!): AuthData!
+          addGoogleUser(userInput: UserInput): AuthData
       }
       schema {
           query: RootQuery

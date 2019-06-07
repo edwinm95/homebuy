@@ -163,8 +163,13 @@ class NavBar extends Component {
                 <Links><a href="/settings" className="links">Settings</a></Links>
                 <Links onClick={() => {
                   localStorage.removeItem('token')
+                  if(window.gapi){
+                    console.log('Google')
+                    window.gapi.auth2.getAuthInstance().signOut().then(() => {
+                      console.log('Signed out')
+                    })
+                  }
                   client.resetStore()
-                  window.location.reload()
                 }}>Sign out</Links>
                </SubMenuComponent>
                 )} 

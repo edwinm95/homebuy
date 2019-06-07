@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import LoginSignUpform from '../../Forms/Login_SignUp'
+import GoogleSignUp from './GoogleSignUp'
 import {maxDeviceWidth} from '../../DeviceLayout'
+import './signup.css'
+import SocialAuthentication from '../../Pages/SocialAuthentication';
 const TitleComponent = styled.div`
     width: 90%;
     margin: auto;
@@ -99,7 +102,38 @@ const GoogleLogo = styled.button`
     font-size: 18px;
 `
 export default class SignUp extends Component {
+    state = {
+        google: {
+            id: '',
+            name: '',
+            email: '',
+            photo: '',
+            token: '',
+            auth: false
+        },
+        facebookAuth: false
+    }
+    googleUserValues = (values) => {
+        const {id, name, photo, email, token} = values
+        this.setState({
+            google: {
+                id,
+                name,
+                email,
+                photo,
+                token,
+                auth: true
+            }
+        })
+    }
   renderModalContent(){
+    if(this.state.google.auth){
+        const {id, photo, name, email, token} = this.state.google
+        const values = {id,photo,firstname: name,email,token}
+        return( 
+                <SocialAuthentication values={values} social={'Google'} />
+        )
+    }
     return(
         <ModalContent>
             <TitleComponent>
@@ -111,7 +145,7 @@ export default class SignUp extends Component {
                     <SocialDesc>or connect with:</SocialDesc>
                     <SocialLogoComponent>
                         <FaceBookLogo><i class="fab fa-facebook-f"></i></FaceBookLogo>
-                        <GoogleLogo><i class="fab fa-google"></i></GoogleLogo>
+                        <GoogleSignUp  sendValues={this.googleUserValues} />
                     </SocialLogoComponent>
                 </SocialLoginComponent>
         </ModalContent>
@@ -128,7 +162,7 @@ export default class SignUp extends Component {
                     <SocialDesc>or connect with:</SocialDesc>
                     <SocialLogoComponent>
                         <FaceBookLogo><i class="fab fa-facebook-f"></i></FaceBookLogo>
-                        <GoogleLogo><i class="fab fa-google"></i></GoogleLogo>
+                        <GoogleSignUp  sendValues={this.googleUserValues}/>
                     </SocialLogoComponent>
                 </SocialLoginComponent>
           </PageContent>

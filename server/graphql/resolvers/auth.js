@@ -1,6 +1,10 @@
 const User = require('../../models/user')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const {OAuth2Client} = require('google-auth-library')
+const keys = require('../../config/keys')
+const {CLIENT_ID} = keys.google
+const client = new OAuth2Client(CLIENT_ID)
 module.exports = {
     createUser: async (args) => {
         const {facebookID, googleID, password, email, userphoto} = args.userInput
@@ -23,6 +27,75 @@ module.exports = {
                 throw error
             }
         },
+    verifyGoogleToken: async (args) => {
+        console.log(args)
+        const ticket = await client.verifyIdToken({
+            idToken: args.token,
+            audience: CLIENT_ID
+        })
+        const payload = ticket.getPayload()
+        console.log(payload)
+        const googleID = payload.sub
+        var user = await User.findOne({googleID})
+        if(user){
+            console.log(user)
+            const token = await jwt.sign({userId: user.id, email: user.email},'secretkey',{
+                expiresIn: 60 * 60
+            })
+            return {userId: user.id, token: token, tokenExpiration: 1}
+    
+        }
+        return {googleUserFound: false}
+    },
+    addGoogleUser: async (args,req) => {
+        const ticket = await client.verifyIdToken({
+            idToken: args.userInput.googleToken,
+            audience: CLIENT_ID
+        })
+        const payload = ticket.getPayload()
+        console.log(payload)
+        const googleID = payload.sub
+        const {
+            email,
+            firstname,
+            lastname,
+            username,
+            userphoto,
+            profressionalcategory,
+            profressionaltitle,
+            industryProfressional,
+            buisnessname,
+            buisnessaddress,
+            buisnesscity,
+            buisnessstate,
+            buisnesszipcode,
+            buisnessphone
+        } = args.userInput
+        const user = new User({
+            googleID,
+            email,
+            firstname,
+            lastname,
+            username,
+            userphoto,
+            profressionalcategory,
+            profressionaltitle,
+            industryProfressional,
+            buisnessname,
+            buisnessaddress,
+            buisnesscity,
+            buisnessstate,
+            buisnesszipcode,
+            buisnessphone
+        })
+        const result = await user.save()
+        if(result){
+            const token = await jwt.sign({userId: user.id, email: user.email},'secretkey',{
+                expiresIn: 60 * 60
+            })
+            return {userId: user.id, token: token, tokenExpiration: 1}
+        }
+    },
     login: async ({email, password}) =>{
         const user = await User.findOne({email})
         if(!user){

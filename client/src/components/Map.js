@@ -1,15 +1,17 @@
 import React, {Component, Fragment} from 'react'
-import { googleAPI, tomtomAPI } from '../config/keys'
+import { google, tomtom } from '../config/keys'
 class Map extends Component {
     constructor(props){
         super(props)
     }
     componentDidMount(){
+        const {lat,lon} = this.props
         if(window.tomtom){
             window.tomtom.L.map('map', {
-                key: tomtomAPI,
-                source: 'vector',
-                basePath: '../../public/sdk/'
+                key: tomtom.API,
+                basePath: '../../public/sdk/',
+                center: [lat,lon],
+                zoom: 15
             })
         }
         // const script = document.createElement('script')
@@ -39,7 +41,7 @@ class Map extends Component {
 
         }
         return(
-            <div id={'map'} style={style}/>
+            <div id='map' style={style}/>
         )
     }   
 }

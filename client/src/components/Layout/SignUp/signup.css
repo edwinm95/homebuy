@@ -1,0 +1,11 @@
+.googlebutton{
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #DB4437;
+    color: white;
+    border-radius: 100%;
+    cursor: pointer;
+    font-size: 18px;
+}

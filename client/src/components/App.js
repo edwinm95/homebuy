@@ -63,7 +63,7 @@ class App extends Component{
                             <Route path="/" exact component={Home}/>
                             {data.isLoggedIn && (<Redirect from="/signup" to="/" />)}
                             <Route path="/signup"  component={SignUp} />
-                            <Route path="/buy" component={Buy} />
+                            <Route path="/buy/:location" component={Buy} />
                             {!data.isLoggedIn && (<Redirect from="/sell" to="/" />)}
                             <Route path="/sell" component={Sell} />
                             <Route path="/rent" component={Rent} />
