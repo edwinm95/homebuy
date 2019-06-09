@@ -9,9 +9,21 @@ class Buy extends Component {
   }
   componentDidMount = async () =>  {
     const {location} = this.props.match.params
-    const coordinates = await this.getCoordiantes(location)
-    const {lat, lon} = coordinates
+    let lat,lon
+    if(location){
+      const coordinates = await this.getCoordiantes(location)
+      lat = coordinates.lat
+      lon = coordinates.lon
+    }else{
+      const coord = await navigator.geolocation.getCurrentPosition(this.getGeoLocationCoordinates)
+      console.log(coord)
+    }
+    console.log(lat,lon)
     this.setState({lat,lon})
+  }
+  getGeoLocationCoordinates = (position) => {
+    console.log(position)
+    return {lat: position.coords.latitude, lon: position.coords.longitude}
   }
   getCoordiantes = async (location) => {
     const url = `https://api.tomtom.com/search/2/geocode/${location}.json?countrySet=US&key=${tomtom.API}`

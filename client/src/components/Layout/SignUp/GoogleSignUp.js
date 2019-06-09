@@ -1,5 +1,4 @@
 import React, {Component, Fragment} from 'react'
-import { google } from '../../../config/keys'
 import gql from 'graphql-tag'
 import {Mutation} from 'react-apollo'
 import { verify } from 'crypto';
@@ -15,19 +14,7 @@ class GoogleSignUp extends Component {
         super(props)
     }
     componentDidMount = () => {
-        const script = document.createElement('script')
-        script.async = true
-        script.defer = true
-        script.src = "https://apis.google.com/js/platform.js"
-        document.body.appendChild(script)
-        script.onload = () => {
             if(window.gapi){
-                window.gapi.load('auth2', function(){
-                    window.gapi.auth2.init({
-                        client_id: `${google.CLIENT_ID}`,
-                        cookiepolicy: 'single_host_origin'
-                    })
-                })
                 window.gapi.signin2.render('my-signin2', {
                     'width': 240,
                     'height': 32,
@@ -39,9 +26,7 @@ class GoogleSignUp extends Component {
                     }   
     
                 })
-           
             }
-        }
     }
     onSuccess = async (googleUser) => {
         var profile = googleUser.getBasicProfile()
@@ -75,8 +60,7 @@ class GoogleSignUp extends Component {
         if(responseData.data){
             googleUserFound = responseData.data.verifyGoogleToken.googleUserFound
         }
-        console.log(googleUserFound)
-        if(googleUserFound){
+        if(googleUserFound === false){
             var values = {
                 id,
                 name,

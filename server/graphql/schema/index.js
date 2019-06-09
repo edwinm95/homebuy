@@ -48,11 +48,12 @@ module.exports = buildSchema(`
         buisnesslinkedin: String
         buisnesswebsite: String
         propertiesOwned: [Property]
+        dateCreated: String
       }
       type AuthData {
-        userId: ID!
+        userId: ID
         token: String
-        tokenExpiration: Int!
+        tokenExpiration: Int
         googleUserFound: Boolean
       }
       input PropertyInput {

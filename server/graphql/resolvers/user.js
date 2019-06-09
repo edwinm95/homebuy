@@ -48,6 +48,7 @@ module.exports = {
                                 'buisnesslinkedin',
                                 'buisnesswebsite'
                             ])
+            result['dateCreated'] = user.dateCreated.toString()
             return result
             }catch(error){
                throw new Error(error)

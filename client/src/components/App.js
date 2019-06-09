@@ -1,6 +1,7 @@
 import React,{Component} from 'react'
 import NavBar from './Layout/NavBar/';
 import Home from './Pages/Home'
+import { google } from '../config/keys'
 import {connect} from 'react-redux'
 import SignUp from './Pages/Signup'
 import Buy from './Pages/Buy'
@@ -42,6 +43,16 @@ cache.writeData({
     }
 })
 class App extends Component{
+    componentDidMount(){
+        if(window.gapi){
+            window.gapi.load('auth2', function(){
+                window.gapi.auth2.init({
+                    client_id: `${google.CLIENT_ID}`,
+                    cookiepolicy: 'single_host_origin'
+                })
+            })
+        }
+    }
     render(){
         return(
             <ApolloProvider client={client}>
@@ -49,11 +60,18 @@ class App extends Component{
                 {({data}) => {
                     const token = localStorage.getItem('token')
                     if(token){
-                        var decoded = jwtDecode(token)
-                         if(decoded.exp < new Date().getTime() / 1000 ){
-                             localStorage.removeItem('token')
-                             client.resetStore()
-                            }
+                        if(token === null || token === undefined){
+                            localStorage.removeItem('token')
+                        }else{
+                            var decoded = jwtDecode(token)
+                            if(decoded.exp < new Date().getTime() / 1000 ){
+                                localStorage.removeItem('token')
+                                var auth2 = window.gapi.auth2.getAuthInstance()
+                                auth2.signOut().then(() => {
+                                })
+                                client.resetStore()
+                               }
+                        }
                     }
                    
                     return(
@@ -64,6 +82,7 @@ class App extends Component{
                             {data.isLoggedIn && (<Redirect from="/signup" to="/" />)}
                             <Route path="/signup"  component={SignUp} />
                             <Route path="/buy/:location" component={Buy} />
+                            <Route path="/buy" component={Buy} />
                             {!data.isLoggedIn && (<Redirect from="/sell" to="/" />)}
                             <Route path="/sell" component={Sell} />
                             <Route path="/rent" component={Rent} />

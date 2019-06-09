@@ -47,6 +47,10 @@ const userSchema = new Schema ({
             type: Schema.Types.ObjectId,
             ref: 'Property'
         }
-    ]
+    ],
+    dateCreated:{
+        type: Date,
+        default: Date.now()
+    }
 })
 module.exports = mongoose.model('User',userSchema)
