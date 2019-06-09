@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import MainImage from '../../assets/images/boston.jpg'
 import {connect} from 'react-redux'
+import { tomtom } from '../../config/keys'
 import {maxDeviceWidth} from '../DeviceLayout'
+import SearchAutoComplete from './SearchAutoComplete'
+import {Redirect} from 'react-router-dom'
 const HomeImage = styled.div`
     width: 100%;
     height: 600px;
@@ -70,23 +73,61 @@ const SearchButton = styled.button`
   background-color: white;
 `
 class Home extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      latitude: null,
+      longitude: null,
+      value: '',
+      toBuyPage: false
+    }
+  }
+  componentDidMount(){
+     navigator.geolocation.getCurrentPosition(this.getPosition)
+  }
+  getPosition = (position) => {
+    var {latitude, longitude} = position.coords
+    latitude = latitude
+    longitude = longitude
+    this.loadValue(latitude,longitude)
+  }
+  loadValue = async (latitude, longitude) => {
+    const url = `https://api.tomtom.com/search/2/reverseGeocode/${latitude},${longitude}.json?key=${tomtom.API}`
+    const response = await fetch(url,{
+      method: 'GET',
+    })
+    const responseData = await response.json()
+    const {addresses} = responseData
+    let value
+    if(addresses){
+      value = addresses[0].address.freeformAddress
+    }
+    this.setState({latitude, longitude, value})
+
+  } 
+  handleSubmit = (event) => {
+    event.preventDefault()
+    console.log('Clicked')
+   this.setState({toBuyPage: true})
+  }
   render() {
-    return (
-     <HomeImage>
-        <Title>Find the Perfect Home</Title>
-        <SearchComponent>
-          <SearchTextBox type='text' placeholder='Enter an address, neighborhood, city, or ZIP code' />
-          <SearchButton>
-            <i className="fal fa-search"></i>
-          </SearchButton>
-        </SearchComponent>
-      </HomeImage>
-    )
+    if(this.state.toBuyPage){
+      var location = this.textInput.getValue()
+      return (<Redirect to={`/buy/${location}`} />)
+    }
+      return (
+        <HomeImage>
+           <Title>Welcome to Homebuy</Title>
+           <form onSubmit={this.handleSubmit}>
+           <SearchComponent>
+             <SearchAutoComplete latitude={this.state.latitude} longitude={this.state.longitude} value={this.state.value} ref={(ref) => this.textInput = ref } />
+             <SearchButton>
+               <i className="fal fa-search"></i>
+             </SearchButton>
+           </SearchComponent>
+           </form>
+         </HomeImage>
+       )
   }
 }
-const mapStateToProps = (state) => {
-  return {
-    token: state.token
-  }
-}
-export default connect(mapStateToProps)(Home)
+export default Home

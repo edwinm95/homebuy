@@ -31,22 +31,26 @@ const userSchema = new Schema ({
         type: String
     },
     industryProfressional:{
-        type: Boolean
+        type: Boolean,
+        required: true
     },
-    profressional: {
-        category: String,
-        title: String,
-        buisnessName: String,
-        buisnessAddress: String,
-        buisnessCity: String,
-        buisnessState: String,
-        buisnessZIP: String
-    },
+    profressionalcategory: String,
+    profressionaltitle: String,
+    buisnessname: String,
+    buisnessaddress: String,
+    buisnesscity: String,
+    buisnessstate: String,
+    buisnesszipcode: String,
+    buisnessphone: String,
     propertiesOwned: [
         {
             type: Schema.Types.ObjectId,
             ref: 'Property'
         }
-    ]
+    ],
+    dateCreated:{
+        type: Date,
+        default: Date.now()
+    }
 })
 module.exports = mongoose.model('User',userSchema)

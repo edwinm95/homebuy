@@ -1,0 +1,43 @@
+.settingstextinput{
+    width: 100%;
+    height: 100%;
+    font-size: 1em;
+    /* border: ${props => props.error ? "1px solid #ff5a50" : "1px solid black"};
+    background-color: ${props => props.error ? "#ffe3e2" : "#fff"}; */
+    box-sizing: border-box;
+    padding: 0.5em;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+.settingstextinput:hover{
+    border: 1px solid green;
+  }
+.settingstextinput:focus{
+    outline: none !important;
+    border: 1px solid green;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(15,133,32,1);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(15,133,32,1);
+    box-shadow: 0px 0px 5px 0px rgba(15,133,32,1);
+  }
+.settingstextinput.name{
+    width: 40%;
+    margin-right: 10px;
+}
+.settingsdropdown{
+    width: 100%;
+    height: 100%;
+    font-size: 1em;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+.settingsdropdown:hover{
+    border: 1px solid green;
+  }
+.settingsdropdown:focus{
+    outline: none !important;
+    border: 1px solid green;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(15,133,32,1);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(15,133,32,1);
+    box-shadow: 0px 0px 5px 0px rgba(15,133,32,1);
+  }

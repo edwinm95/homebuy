@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import {connect} from 'react-redux'
-import * as tokenActions from '../../../actions/token/'
 import { Redirect } from 'react-router-dom'
+import { Query, withApollo, Mutation, ApolloConsumer } from 'react-apollo'
+import gql from 'graphql-tag'
 const LinkComponent = styled.div`
     clear: both;
     width: 90%;
@@ -86,6 +86,23 @@ const ForgotPassword = styled.div`
     cursor: pointer;
     text-align: center;
 `
+const LOG_IN = gql`
+    mutation login($email: String!, $password: String!) {
+        login(email: $email, password: $password){
+            userId
+            token
+            tokenExpiration
+        }
+    }
+`
+const CREATE_USER = gql`
+    mutation createUser($userInput: UserInput){
+        createUser(userInput: $userInput){
+            _id
+            email
+        }
+    }
+`
  class form extends Component {
   constructor(props){
       super(props)
@@ -112,78 +129,6 @@ const ForgotPassword = styled.div`
       this.email = React.createRef()
       this.password = React.createRef()
   }
-  handleSigninSubmit = async (event) => {
-      event.preventDefault();
-      const password = this.password.current.value;
-      const email = this.email.current.value;
-      const requestBody = {
-          query: 
-          `query {
-              login(email: "${email}", password: "${password}"){
-                userId
-                token
-                tokenExpiration
-              }
-          }`
-      }
-      try{
-        const response = await fetch('http://localhost:5000/graphql',{
-            method: 'POST',
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-          })
-        const responseData = await response.json()
-        const {data, errors} = responseData
-        if(errors){
-            console.log(errors)
-        }else{
-            const {token} = data.login
-            this.props.addToken(token)
-            window.location.reload()
-        }
-      }catch(error){
-          throw error
-      }
-
-  }
-
-  handleSignUpSubmit = async (event) => {
-      event.preventDefault();
-      const password = this.password.current.value;
-      const email = this.email.current.value;
-      const requestBody = {
-        query: `
-            mutation {
-                createUser(userInput: {email: "${email}", password: "${password}"}) {
-                    _id
-                    email
-                }
-            }
-        `
-      };
-      try{
-        const response = await fetch('http://localhost:5000/graphql', {
-          method: 'POST',
-          body: JSON.stringify(requestBody),
-          headers: {
-              'Content-Type': 'application/json'
-          }
-      })
-      const responseData = await response.json()
-      const {errors, data} = responseData
-      if(errors){
-          console.log(errors)
-      }else{
-          console.log(data.createUser)
-      }
-      }catch(error){
-          throw error
-      }
-  }
-
-
   reset = (selection) => {
             this.setState({
                 active: selection,
@@ -325,39 +270,70 @@ const ForgotPassword = styled.div`
   renderForm = () => {
       if(this.state.active === 'signin'){
         return(
-            <form onSubmit={this.handleSigninSubmit}> 
-                <LinkComponent>
-                    <SigninLink onClick={() => this.reset('signin')} style={{borderBottom: '1px solid green'}} >Sign In</SigninLink>
-                    <SignUpLink onClick={() => this.reset('signup')}>Sign Up</SignUpLink>
-                </LinkComponent>
-                <InputComponent>
-                { this.state.error.email.showError ?  <EmailInput error type="text" placeholder="Enter email" ref={this.email} onChange={(e) => this.validateEmail(e)} /> :
-                     <EmailInput  type="text" placeholder="Enter email" ref={this.email} onChange={(e) => this.validateEmail(e)} />}
-                     <Error>{this.state.error.email.style.text}</Error>
-                    <PasswordInput type="password" placeholder='Enter password' ref={this.password} />
-                    <SubmitButton disabled={this.state.error.email.showError}>Submit</SubmitButton>
-                    <ForgotPassword>Forgot Password ?</ForgotPassword>
-                </InputComponent>
-            </form>
+            <ApolloConsumer>
+                {(client) => (
+                    <Mutation 
+                        mutation={LOG_IN}
+                        onCompleted={({login}) => {
+                            const {token} = login
+                            localStorage.setItem('token',token)
+                            client.resetStore()
+                            window.location.reload()
+                        }}
+                        >
+                    {(login,{data}) => (
+                    <form onSubmit={e => {
+                        e.preventDefault()
+                        login({variables: {email: this.email.current.value, password: this.password.current.value} })
+                    }}> 
+                        <LinkComponent>
+                            <SigninLink onClick={() => this.reset('signin')} style={{borderBottom: '1px solid green'}} >Sign In</SigninLink>
+                            <SignUpLink onClick={() => this.reset('signup')}>Sign Up</SignUpLink>
+                        </LinkComponent>
+                        <InputComponent>
+                        { this.state.error.email.showError ?  <EmailInput error type="text" placeholder="Enter email" ref={this.email} onChange={(e) => this.validateEmail(e)} /> :
+                            <EmailInput  type="text" placeholder="Enter email" ref={this.email} onChange={(e) => this.validateEmail(e)} />}
+                            <Error>{this.state.error.email.style.text}</Error>
+                            <PasswordInput type="password" placeholder='Enter password' ref={this.password} />
+                            <SubmitButton disabled={this.state.error.email.showError}>Submit</SubmitButton>
+                            <ForgotPassword>Forgot Password ?</ForgotPassword>
+                        </InputComponent>
+                    </form>
+                    )}
+                </Mutation>
+                )}
+            </ApolloConsumer>
         )
       }else{
         return(
-            <form onSubmit={this.handleSignUpSubmit}>
-                <LinkComponent>
-                    <SigninLink onClick={() => this.reset('signin')}>Sign In</SigninLink>
-                    <SignUpLink onClick={() => this.reset('signup')} style={{borderBottom: '1px solid green'}}>Sign Up</SignUpLink>
-                </LinkComponent>
-                <InputComponent>
-                    { this.state.error.email.showError ?  <EmailInput error type="text" placeholder="Enter email" ref={this.email} onChange={(e) => this.validateEmail(e)} /> :
-                     <EmailInput  type="text" placeholder="Enter email" ref={this.email} onChange={(e) => this.validateEmail(e)} />}
-                     <Error>{this.state.error.email.style.text}</Error>
-                    { this.state.error.password.showError ?  <PasswordInput error type="password" placeholder="Create password" ref={this.password} onChange={(e) => this.validatePassword(e)}/> : 
-                        <PasswordInput  type="password" placeholder="Create password" ref={this.password} onChange={(e) => this.validatePassword(e)}/> }
-                     <Error>{this.state.error.password.style.text.length}</Error>
-                     <Error>{this.state.error.password.style.text.containNumber}</Error>
-                    <SubmitButton disabled={this.state.error.email.showError || this.state.error.password.showError}>Create Account</SubmitButton>
-                </InputComponent>
-            </form>
+            <Mutation mutation={CREATE_USER}>
+                {(createUser, {data}) => (
+                <form onSubmit={e => {
+                    e.preventDefault()
+                    const userInput = {
+                        email: this.state.email.value,
+                        password: this.state.password.value
+                    }
+                    createUser({variables: {userInput}})
+                    console.lof(data)
+                }}>
+                    <LinkComponent>
+                        <SigninLink onClick={() => this.reset('signin')}>Sign In</SigninLink>
+                        <SignUpLink onClick={() => this.reset('signup')} style={{borderBottom: '1px solid green'}}>Sign Up</SignUpLink>
+                    </LinkComponent>
+                    <InputComponent>
+                        { this.state.error.email.showError ?  <EmailInput error type="text" placeholder="Enter email" ref={this.email} onChange={(e) => this.validateEmail(e)} /> :
+                        <EmailInput  type="text" placeholder="Enter email" ref={this.email} onChange={(e) => this.validateEmail(e)} />}
+                        <Error>{this.state.error.email.style.text}</Error>
+                        { this.state.error.password.showError ?  <PasswordInput error type="password" placeholder="Create password" ref={this.password} onChange={(e) => this.validatePassword(e)}/> : 
+                            <PasswordInput  type="password" placeholder="Create password" ref={this.password} onChange={(e) => this.validatePassword(e)}/> }
+                        <Error>{this.state.error.password.style.text.length}</Error>
+                        <Error>{this.state.error.password.style.text.containNumber}</Error>
+                        <SubmitButton disabled={this.state.error.email.showError || this.state.error.password.showError}>Create Account</SubmitButton>
+                    </InputComponent>
+                </form>
+                )}
+            </Mutation>
           )
       }
 
@@ -371,4 +347,4 @@ const ForgotPassword = styled.div`
     )
   }
 }
-export default connect(null,tokenActions)(form)
+export default form

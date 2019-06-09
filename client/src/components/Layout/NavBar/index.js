@@ -1,17 +1,36 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import {connect} from 'react-redux'
 import {size} from '../../DeviceLayout'
 import MediaQuery from 'react-responsive'
 import SignUp from '../../Modal/SignUp/'
 import {Link, NavLink} from 'react-router-dom'
-import * as actions from '../../../actions/token/'
 import './navbar.css'
+import { Query } from 'react-apollo'
+import {IS_LOGGED_IN} from '../../../query'
 const NavBarComponent = styled.div`
     width: 100%;
     height: 60px;
     margin: auto;
     border-bottom: 1px solid #ccc;
+    background-color: #FFFFFF;
+`
+const SubMenuComponent = styled.div`
+position: fixed;
+right: 0;
+top: 4.2em;
+border: 0.5px solid #ccc;
+margin: auto;
+width: 20%;
+background-color: white;
+z-index: 1;
+`
+const Links = styled.div`
+margin: 1em;
+padding: 5px;
+cursor: pointer;
+:hover{
+  color: green;
+}
 `
 const NavBarLinkComponent = styled.div`
   float: left;
@@ -108,72 +127,68 @@ class NavBar extends Component {
       </div>
     )
   }
-  signout = () => {
-    this.props.removeToken()
-    window.location.reload()
-  }
-  renderAccountSubmenu(){
-    const SubMenuComponent = styled.div`
-      position: fixed;
-      right: 0;
-      top: 4.2em;
-      border: 0.5px solid #ccc;
-      margin: auto;
-      width: 20%;
-      background-color: white;
-      z-index: 1;
-    `
-    const Links = styled.div`
-      margin: 1em;
-      padding: 5px;
-      cursor: pointer;
-      :hover{
-        color: green;
-      }
-    `
-    return(
-      <SubMenuComponent onMouseLeave={this.hideSubMenu}>
-        <Links><a href ="/myproperties" className="links">My Properties</a></Links>
-        <Links><a href="/settings" className="links">Settings</a></Links>
-        <Links onClick={this.signout}>Sign out</Links>
-      </SubMenuComponent>
-    )
-  }
   renderDesktopNavBar(){
     return(
-      <NavBarComponent>
-        <NavBarLinkComponent>
-          <LeftLinkComponent>
-            <a href="/buy" className="links">{links.buy.text}</a>
-          </LeftLinkComponent>
-          <LeftLinkComponent>
-            <a href="/rent"  className="links">{links.rent.text}</a>
-          </LeftLinkComponent>
-        </NavBarLinkComponent>
+      <Query query={IS_LOGGED_IN}>
+        {({client, data, loading, error}) => {
+          if(loading)
+              return <div></div>
+          if(error)
+              return <div></div>
+          return(
+            <NavBarComponent>
+            <NavBarLinkComponent>
+              <LeftLinkComponent>
+                <a href="/buy" className="links">{links.buy.text}</a>
+              </LeftLinkComponent>
+              <LeftLinkComponent>
+                <a href="/rent"  className="links">{links.rent.text}</a>
+              </LeftLinkComponent>
+            </NavBarLinkComponent>
+    
+            <NavBarLinkComponent>
+              <Logo>
+                <a href="/" className="logo">{links.logo.text}</a>
+              </Logo>
+            </NavBarLinkComponent>
+    
+            <NavBarLinkComponent onMouseLeave={this.hideSubMenu}>
+              <RightLinksComponent>
+                {data.isLoggedIn ? (<a href="/myaccount" onMouseEnter={this.showSubMenu} className="links">{links.my_account.text}</a>): 
+                    (<a onClick={() => this.showLoginSignupModal()} className="links">{links.login_signup.text}</a>)
+                    }
+                {this.state.showAccountSubMenu && ( 
+              <SubMenuComponent>
+                <Links><a href ="/myproperties" className="links">My Properties</a></Links>
+                <Links><a href="/settings" className="links">Settings</a></Links>
+                <Links onClick={() => {
+                  if(window.gapi){
+                    var auth2 = window.gapi.auth2.getAuthInstance()
+                    auth2.signOut().then(() => {
+                    })
+                  }
+                  localStorage.removeItem('token')
+                  client.resetStore()
+                  window.location.reload()
+                }}>Sign out</Links>
+               </SubMenuComponent>
+                )} 
+              </RightLinksComponent>
+              <RightLinksComponent>
+                  {data.isLoggedIn ? (<a href ="/sell"  className="links">{links.sell.text}</a>): 
+                  (<a className="links" onClick={() => this.showLoginSignupModal()} >{links.sell.text}</a>)
+                  }
+              </RightLinksComponent>
+              <RightLinksComponent>
+                  <a href="/listrental" className="links">{links.rental.text}</a>
+              </RightLinksComponent>
+            </NavBarLinkComponent>
+    
+        </NavBarComponent>
+          )
 
-        <NavBarLinkComponent>
-          <Logo>
-            <a href="/" className="logo">{links.logo.text}</a>
-          </Logo>
-        </NavBarLinkComponent>
-
-        <NavBarLinkComponent >
-          <RightLinksComponent>
-            {this.props.token ? (<a href="/myaccount" onMouseEnter={this.showSubMenu} className="links">{links.my_account.text}</a>): 
-                (<a onClick={() => this.showLoginSignupModal()} className="links">{links.login_signup.text}</a>)
-                }
-          </RightLinksComponent>
-          <RightLinksComponent>
-              {this.props.token ? (<a href ="/sell"  className="links">{links.sell.text}</a>): 
-              (<a className="links" onClick={() => this.showLoginSignupModal()} >{links.sell.text}</a>)
-              }
-          </RightLinksComponent>
-          <RightLinksComponent>
-              <a href="/listrental" className="links">{links.rental.text}</a>
-          </RightLinksComponent>
-        </NavBarLinkComponent>
-
-    </NavBarComponent>
+        }}
+      </Query>
     )
   }
   showDrawer(){
@@ -268,14 +283,10 @@ class NavBar extends Component {
         </MediaQuery>
         <MediaQuery minDeviceWidth={size.laptop}>
           {this.renderDesktopNavBar()}
-          {this.state.showAccountSubMenu && (this.renderAccountSubmenu())} 
         </MediaQuery>
         {this.renderLoginSignUp()}
       </div>
     )
   }
 }
-const mapStateToProps = (state) => {
-  return {token: state.token}
-}
-export default connect(mapStateToProps,actions)(NavBar)
+export default NavBar

@@ -4,13 +4,17 @@
     left: 10%;
     top: 10%;
 }
-a.editbutton{
+.editbutton{
+    box-sizing: border-box;
     -webkit-appearance: button;
     -moz-appearance: button;
     appearance: button;
     text-decoration: none;
     color: initial;
-}  
+} 
+.editbuttoncomponent{
+    margin: 10px 0;
+}
 .profilepicturecomponent{
     position: relative;
     width: 100%;
@@ -31,12 +35,7 @@ a.editbutton{
 }
 .rightcomponent {
     width: 100%;
-}
-.editbuttoncomponent{
-    width: 100%;
-    margin-bottom: 0.5em;
-    padding: 0.5em 0;
-}   
+} 
 .editbutton:hover{
     border: 1px solid black;
     color: green;
@@ -84,7 +83,6 @@ a.editbutton{
         width: 100%;
         margin-bottom: 0.5em;
         padding: 0.5em 0;
-        background-color: rebeccapurple;
     }
     .editbutton{
         width: 50%;
