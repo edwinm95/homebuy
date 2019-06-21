@@ -4,7 +4,6 @@ import Home from './Pages/Home'
 import { google } from '../config/keys'
 import {connect} from 'react-redux'
 import SignUp from './Pages/Signup'
-import Buy from './Pages/Buy'
 import Sell from './Pages/Sell'
 import Rent from './Pages/Rent'
 import ListRental from './Pages/ListRental/'
@@ -98,11 +97,9 @@ class App extends Component{
                             <Route path="/" exact component={Home}/>
                             {data.isLoggedIn && (<Redirect from="/signup" to="/" />)}
                             <Route path="/signup"  component={SignUp} />
-                            <Route path="/buy/:location" component={Buy} />
-                            <Route path="/buy" component={Buy} />
                             {!data.isLoggedIn && (<Redirect from="/sell" to="/signup" />)}
                             <Route path="/sell" component={Sell} />
-                            <Route path="/rent" component={Rent} />
+                            <Route path="/rent/:location?" component={Rent} />
                             <Route path="/listing/:id" component={Listing} />
                             {!data.isLoggedIn && (<Redirect from="/listrental" to="/signup" />)}
                             <Route path="/listrental/:type/:id?" component={ListRental} /> 

@@ -113,7 +113,7 @@ class Home extends Component {
   render() {
     if(this.state.toBuyPage){
       var location = this.textInput.getValue()
-      return (<Redirect to={`/buy/${location}`} />)
+      return (<Redirect to={`/rent/${location}`} />)
     }
       return (
         <HomeImage>

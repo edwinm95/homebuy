@@ -154,9 +154,6 @@ class NavBar extends Component {
             <NavBarComponent>
             <NavBarLinkComponent>
               <LeftLinkComponent>
-                <Link to="/buy" className="links">{links.buy.text}</Link>
-              </LeftLinkComponent>
-              <LeftLinkComponent>
                 <Link to="/rent"  className="links">{links.rent.text}</Link>
               </LeftLinkComponent>
             </NavBarLinkComponent>
