@@ -275,8 +275,10 @@ const CREATE_USER = gql`
                     <Mutation 
                         mutation={LOG_IN}
                         onCompleted={({login}) => {
-                            const {token} = login
+                            console.log(login)
+                            const {token,userId} = login
                             localStorage.setItem('token',token)
+                            client.writeData({ data: {userId : userId}})
                             client.resetStore()
                             window.location.reload()
                         }}

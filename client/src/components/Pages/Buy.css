@@ -1,0 +1,51 @@
+.buymaincontainer{
+    background-color: white;
+    height: 500px;
+    position: absolute;
+    right: 0.5%;
+    top: 10%;
+    width: 55%;
+    border: 1px solid #ccc;
+}
+@media only screen  and (max-width: 768px){
+    .buymaincontainer{
+        width: 100%;
+        position: absolute;
+        right: 0;
+    }
+}
+.propertycontainer{
+    width: 100%;
+    top: 5%;
+    position: relative;
+    height: 200px;
+}
+.property{
+    display: inline-block;
+    height: 200px;
+    width: 45%;
+    margin: 0 10px;
+    position: relative;
+    cursor: pointer;
+}
+.infoproperty{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+.priceinfo{
+    color: white;
+    font-size: 2em;
+    font-weight: 500;
+}
+.addressinfo{
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+.buylisting{
+    display: inline-block;
+    width: 40%;
+    margin: auto;
+    height: 100px;
+}

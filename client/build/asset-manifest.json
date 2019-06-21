@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/static/css/main.18ab2c5b.chunk.css",
+    "main.js": "/static/js/main.99323ce9.chunk.js",
+    "main.js.map": "/static/js/main.99323ce9.chunk.js.map",
+    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
+    "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
+    "static/css/2.b0f4bb8a.chunk.css": "/static/css/2.b0f4bb8a.chunk.css",
+    "static/js/2.f5ae06a3.chunk.js": "/static/js/2.f5ae06a3.chunk.js",
+    "static/js/2.f5ae06a3.chunk.js.map": "/static/js/2.f5ae06a3.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.39833ad9b8fe9d3b9625ccaa31192aac.js": "/precache-manifest.39833ad9b8fe9d3b9625ccaa31192aac.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.b0f4bb8a.chunk.css.map": "/static/css/2.b0f4bb8a.chunk.css.map",
+    "static/css/main.18ab2c5b.chunk.css.map": "/static/css/main.18ab2c5b.chunk.css.map",
+    "static/media/boston.jpg": "/static/media/boston.69bf37c6.jpg",
+    "static/media/all.css": "/static/media/fa-solid-900.ff4aabff.ttf"
+  }
+}

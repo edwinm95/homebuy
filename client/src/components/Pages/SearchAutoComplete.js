@@ -71,23 +71,11 @@ class SearchAutoComplete extends Component {
         }
         this.setState({collections: array})
       }
-    renderSuggestions(){
-        console.log('render Suggestions ()',this.state.collections)
-        const options = this.state.collections.map((element) => {
-            return(
-                <div className="collectionfields" key={element} onClick={() => this.selectValue(element)}>{element}</div>
-            )
-        })
-        console.log(options)
-        return options
-    }
     render(){
         return(
             <Fragment>
                 <SearchTextBox type='text' placeholder='Enter an address, neighborhood, city, or ZIP code' ref={(ref => this.textInput = ref)} onChange={this.handleChange}/>
-                <div className ="collectionfieldcomponent">
                     {this.state.collections.length > 0 && <SearchAutoCompleteSuggestions collections={this.state.collections} selectValue={this.selectValue} />}
-                </div>
             </Fragment>
         )
     }

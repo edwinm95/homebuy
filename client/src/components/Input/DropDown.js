@@ -53,7 +53,6 @@ class DropDown extends Component {
       array = values.map((value) =>  {
           if(queryValue !== null || queryValue !== undefined){
             if(value === queryValue){
-              console.log(value)
               return <option selected value={value}>{value}</option>
             }
           }

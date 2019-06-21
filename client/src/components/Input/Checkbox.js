@@ -7,6 +7,11 @@ class Checkbox extends Component {
             checked: []
         }
     }
+    componentDidMount() {
+        if(this.props.queryValue !== null && this.props.queryValue !== undefined){
+            this.setState({checked: [...this.props.queryValue]})
+        }
+    }
     getValue = () => {
         return this.state.checked
     }
@@ -26,12 +31,21 @@ class Checkbox extends Component {
         }
 
     }
-    renderCheckbox(values){
+    renderCheckbox = (values) => {
+        const stateArray = this.state.checked
         const array = values.map((value) => {
-            return (
-            <div>
-                <input type="checkbox" value={value} onClick={this.handleClick}/>{value}
-            </div> )
+            if(stateArray.indexOf(value)!== -1){
+                return (
+                    <div>
+                        <input type="checkbox"value={value} checked onClick={this.handleClick}/>{value}
+                    </div> )
+            }else{
+                return (
+                    <div>
+                        <input type="checkbox"value={value} onClick={this.handleClick}/>{value}
+                    </div> )
+            }
+
         })
         return array
     }

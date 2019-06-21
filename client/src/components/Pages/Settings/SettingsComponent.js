@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import {Query, Mutation} from 'react-apollo'
 import gql from 'graphql-tag'
+import {size, minDeviceWidth, maxDeviceWidth} from '../../DeviceLayout'
 import TextInput from '../../Input/Text'
 import DropDown from '../../Input/DropDown'
 import File from '../../Input/File'
@@ -19,27 +20,49 @@ const TESTPHOTO= gql`
 `
 const MainContainer = styled.div`
   position: absolute;
-  left: 25%;
+  left: 10%;
   margin: 1em;
-  width: 50%;
+  width: 80%;
+  top: 10%;
+  background-color: white;
+  border: 1px solid #ccc;
+  @media only screen and ${maxDeviceWidth.tablet} {
+    width: 100%;
+    margin: 0;
+    left: 0;
+}
 `
 const Title = styled.h1`
   align: left;
+  margin: 10px;
+  @media only screen and ${maxDeviceWidth.tablet} {
+    text-align: center;
+}
 `
 const LabelInputComponnets = styled.div`
   margin: 2em 0;
 `
 const Label = styled.div`
   display: inline-block;
-  width: 50%;
+  width: 45%;
+  margin: 0 10px;
   height: 100%;
   font-size: 1em;
   font-weight: bold;
+  @media only screen and ${maxDeviceWidth.tablet} {
+    width: 100%;
+    display: block;
+}
 `
 const TextInputComponnet = styled.div`
   display: inline-block;
-  width: 50%;
+  width: 45%;
   height: 2em;
+  @media only screen and ${maxDeviceWidth.tablet} {
+    width: 90%;
+    margin: 0 10px;
+    display: block;
+}
 `
 const FileInput = styled.input`
   display: none;
@@ -121,6 +144,23 @@ const CancelButton = styled.a`
     -moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.75);
   }
+`
+const CheckBox = styled.input`
+  width: 5%;
+  height: 1em;
+  float: left;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  @media only screen and ${maxDeviceWidth.tablet} {
+    margin 0 10px;
+}
+
+`
+const CheckBoxDesc = styled.div`
+  display: block;
 `
 const fields = {
   firstname:{
@@ -345,8 +385,9 @@ class SettingsComponent extends Component {
                     
                     <LabelInputComponnets>
                         <ProfressionalCheckBoxComponent onClick={this.toggleFields}>
-                          {this.state.industryProfressional ? <input type = "checkbox" checked ref={(ref) => this.checkbox = ref}/>  : 
-                        <input type = "checkbox" ref={(ref) => this.checkbox = ref}/>}I am an industry profressional
+                          {this.state.industryProfressional ? <CheckBox type = "checkbox" checked ref={(ref) => this.checkbox = ref}/>  : 
+                        <CheckBox type = "checkbox" ref={(ref) => this.checkbox = ref}/>}
+                        <CheckBoxDesc>I am an industry profressional</CheckBoxDesc>
                         </ProfressionalCheckBoxComponent>
                     </LabelInputComponnets>
                     {this.state.industryProfressional && this.renderProfressionalFields(values)}

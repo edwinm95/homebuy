@@ -5,9 +5,9 @@ module.exports = buildSchema(`
         _id: ID!
         description: String!
         date: String!
-        address: String!
-        rent: Int!
-        securitydeposit: Int!
+        address: Address!
+        rent: String!
+        securitydeposit: String!
         beds: String!
         baths: String!
         squarefeet: Int!
@@ -23,6 +23,28 @@ module.exports = buildSchema(`
         photos: [String!]!
         additionalamenities: [String]
         createdBy: ID!
+        views: [String]
+        saves: [ID]
+      }
+      scalar Address{
+        streetName: String
+        city: String
+        state: String
+        zipcode: String
+        lat: Int
+        lon: Int
+      }
+      type Message {
+        _id: ID!
+        timestamp: String!,
+        property: Property!
+        body: String!
+
+      }
+      type MessageReference {
+        message: ID!
+        to: User!
+        from: User!
       }
       type User{
         _id: ID!
@@ -57,8 +79,9 @@ module.exports = buildSchema(`
         googleUserFound: Boolean
       }
       input PropertyInput {
+        _id: ID
         description: String
-        address: String
+        address: Address
         date: String
         rent: String
         securitydeposit: String
@@ -101,20 +124,31 @@ module.exports = buildSchema(`
         buisnesslinkedin: String
         buisnesswebsite: String
       }
+      input MessageInput {
+        to: ID!
+        body: String!
+        property: ID!
+      }
       type RootQuery {
-          properties: [Property!]!
+          getProperties: [Property!]!
           users: [User!]!
           refreshToken: AuthData!
           getUser: User!
+          getProperty(propertyID: ID!): Property!
       }
       type RootMutation {
           login(email: String!, password: String!): AuthData!
-          createProperty(propertyInput: PropertyInput): Boolean
+          createProperty(propertyInput: PropertyInput): Property
           createUser(userInput: UserInput): User
           editUser(userInput: UserInput): Boolean
           testPhoto(file: Upload!) : Boolean
           verifyGoogleToken(token: String!): AuthData!
           addGoogleUser(userInput: UserInput): AuthData
+          addViews(propertyID: ID!, ipAddress: String!): Property
+          addSaves(propertyID: ID!): Boolean
+          createMessage(messageInput: MessageInput): Boolean
+          editProperty(propertyInput: PropertyInput): Property
+
       }
       schema {
           query: RootQuery

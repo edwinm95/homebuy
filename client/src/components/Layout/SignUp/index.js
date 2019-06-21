@@ -71,12 +71,13 @@ const SocialDesc = styled.div`
     width: 50%;
     display: inline-block;
     text-align: right;
-    font-size: 22px;
+    font-size: 1em;
 `
 const SocialLogoComponent = styled.div`
     width: 50%;
     display: inline-block;
     text-align: left;
+    margin: 20px auto;
 `
 const FaceBookLogo = styled.button`
     display: inline-block;
@@ -142,10 +143,9 @@ export default class SignUp extends Component {
                 </TitleComponent>
                 <LoginSignUpform/>
                 <SocialLoginComponent close={() => this.props.close()}>
-                    <SocialDesc>or connect with:</SocialDesc>
+                <SocialDesc>Or Connect with:&nbsp;</SocialDesc>
                     <SocialLogoComponent>
-                        <FaceBookLogo><i class="fab fa-facebook-f"></i></FaceBookLogo>
-                        <GoogleSignUp  sendValues={this.googleUserValues} />
+                        <GoogleSignUp  sendValues={this.googleUserValues}/>
                     </SocialLogoComponent>
                 </SocialLoginComponent>
         </ModalContent>
@@ -159,9 +159,8 @@ export default class SignUp extends Component {
                 </TitleComponent>
                 <LoginSignUpform/>
                 <SocialLoginComponent>
-                    <SocialDesc>or connect with:</SocialDesc>
+                    <SocialDesc>Or Connect with:&nbsp;</SocialDesc>
                     <SocialLogoComponent>
-                        <FaceBookLogo><i class="fab fa-facebook-f"></i></FaceBookLogo>
                         <GoogleSignUp  sendValues={this.googleUserValues}/>
                     </SocialLogoComponent>
                 </SocialLoginComponent>

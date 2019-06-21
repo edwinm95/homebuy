@@ -1,0 +1,105 @@
+.addressmaincontainer {
+    position: absolute;
+    width: 80%;
+    left: 10%;
+    top: 15%;
+    border: 1px solid #ccc;
+    padding: 20px 0; 
+    background-color: white;
+}
+@media screen and (max-width: 768px){
+    .addressmaincontainer {
+        position: absolute;
+        width: 100%;
+        left: 0;
+    }
+}
+input {
+    height: 40px;
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+.titlecontainer{
+    width: 80%;
+    left: 10%;
+    text-align: left;
+    position: relative;
+    font-size: 30px;
+    font-weight: 600;
+    border-bottom: 0.5px solid #ccc;
+}
+.desccontainer {
+    width: 100%;
+}
+.addresscontainer{
+    width: 80%;
+    left: 10%;
+    margin: 20px 0;
+    position: relative;
+}
+.address{
+
+}
+.citycontainer{
+    width: 80%;
+    left: 10%;
+    margin: 20px 0;
+    position: relative;
+}   
+.city{
+
+}
+.statecontainer{
+    width: 80%;
+    left: 10%;
+    margin: 20px 0;
+    position: relative;
+}   
+.state{
+    width: 50%;
+
+}
+.zipcodecontainer{
+    width: 80%;
+    left: 10%;
+    margin: 20px 0;
+    position: relative;
+}
+.zipcode{
+    width: 50%;
+}
+.createbuttoncontainer{
+    width: 80%;
+    left: 10%;
+    height: 40px;
+    margin: 20px 0;
+    position: relative;
+}
+.createbutton{
+    width: 100%;
+    background-color: green;
+    display: block;
+    color: white;
+    height: 100%;
+    cursor: pointer;
+    text-align: center;
+    padding: 10px 0;
+    box-sizing: border-box;
+    font-weight: 600;
+}
+.addresssuggestionlist{
+    font-size: 16px;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    cursor: pointer;
+}
+.addresssuggestioncontainer{
+    background-color: white;
+    margin: auto;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}

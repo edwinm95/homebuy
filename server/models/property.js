@@ -12,15 +12,36 @@ const propertySchema = new Schema({
         default: Date.now()
     },
     address : {
+        streetName: {
+            type: String ,
+            required: true
+        },
+        city: {
+            type: String,
+            required: true
+        },
+        state: {
+            type: String,
+            required: true
+        },
+        zipcode: {
+            type: String
+        },
+        lat: {
+            type: String,
+            required: true
+        },
+        lon:{
+            type: String,
+            required: true
+        }
+    },
+    rent: {
         type: String,
         required: true
     },
-    rent: {
-        type: Number,
-        required: true
-    },
     securitydeposit:{
-        type: Number,
+        type: String,
         required: true
     },
     beds: {
@@ -32,7 +53,7 @@ const propertySchema = new Schema({
         required: true
     },
     squarefeet: {
-        type: Number,
+        type: String,
         required: true
     },
     leaseduration: {
@@ -81,6 +102,13 @@ const propertySchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    views: {
+        type: [String],
+    },
+    saves: {
+        type: [Schema.Types.ObjectId],
+        ref: 'User'
     }
 })
 module.exports = mongoose.model('Property',propertySchema)

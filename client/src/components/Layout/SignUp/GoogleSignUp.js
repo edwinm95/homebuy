@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react'
 import gql from 'graphql-tag'
 import {Mutation} from 'react-apollo'
 import { verify } from 'crypto';
+import {google} from '../../../config/keys'
 import SocialAuthentication from '../../Pages/SocialAuthentication'
 import {withApollo} from 'react-apollo'
 const VERIFY_TOKEN = gql`
@@ -14,18 +15,19 @@ class GoogleSignUp extends Component {
         super(props)
     }
     componentDidMount = () => {
-            if(window.gapi){
-                window.gapi.signin2.render('my-signin2', {
-                    'width': 240,
-                    'height': 32,
-                    'longtitle': true,
-                    'theme': 'dark',
-                    'onsuccess': this.onSuccess,
-                    'onfailure': (error) => {
-                        console.log(error)
-                    }   
-    
-                })
+            try{    
+                if(window.gapi){
+                    const element = document.getElementById('googlebutton')
+                    var auth2 = window.gapi.auth2.init({
+                        client_id: google.CLIENT_ID,
+                        cookiepolicy: 'single_host_origin',
+                        // Request scopes in addition to 'profile' and 'email'
+                        //scope: 'additional_scope'
+                      });
+                    auth2.attachClickHandler(element,{}, this.onSuccess, this.onFailure)
+                }
+            }catch(error){
+                console.log(error)
             }
     }
     onSuccess = async (googleUser) => {
@@ -84,7 +86,9 @@ class GoogleSignUp extends Component {
     render() {
         return(
             <Fragment>
-                <div id="my-signin2"></div>
+                <div id="googlebutton">
+                    <i class="fab fa-google"></i>
+                </div>
             </Fragment>
         )
     }

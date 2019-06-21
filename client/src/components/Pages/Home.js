@@ -8,7 +8,7 @@ import SearchAutoComplete from './SearchAutoComplete'
 import {Redirect} from 'react-router-dom'
 const HomeImage = styled.div`
     width: 100%;
-    height: 600px;
+    height: 100vh;
     background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('${MainImage}');
     background-position: center;
     background-size: cover;
@@ -20,7 +20,7 @@ const Title = styled.h1`
   position: absolute;
   left: 25%;
   text-align: center;
-  font-size: 60px;
+  font-size: 4em;
   top: 15%;
   font-family: 'Playfair Display', serif;
   color: white;
@@ -33,7 +33,7 @@ const Title = styled.h1`
 `
 const SearchComponent = styled.div`
   width: 50%;
-  height: 50px;
+  height: 3em;
   top: 45%;
   position: absolute;
   left: 28%;

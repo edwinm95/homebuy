@@ -1,11 +1,15 @@
-.googlebutton{
-    display: inline-block;
-    width: 32px;
-    height: 32px;
+#googlebutton{
+    display: block;
+    width: 1.5em;
+    height: 1.5em;
     border-radius: 50%;
     background-color: #DB4437;
     color: white;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     border-radius: 100%;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 1.5em;
+    padding: 0.2em 0.2em;
 }

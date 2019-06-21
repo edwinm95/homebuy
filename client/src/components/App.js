@@ -11,6 +11,7 @@ import ListRental from './Pages/ListRental/'
 import MyAcoount from './Pages/MyAccount/'
 import Settings from './Pages/Settings/'
 import Properties from './Pages/Properties'
+import Listing from './Pages/Listing'
 import * as actions from '../actions/token'
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
 import { ApolloClient } from 'apollo-client'
@@ -39,21 +40,37 @@ const client = new ApolloClient({
 })
 cache.writeData({
     data: {
-        isLoggedIn: !!localStorage.getItem('token')
+        isLoggedIn: !!localStorage.getItem('token'),
+        userId: null
     }
 })
 class App extends Component{
-    componentDidMount(){
-        if(window.gapi){
-            window.gapi.load('auth2', function(){
-                window.gapi.auth2.init({
-                    client_id: `${google.CLIENT_ID}`,
-                    cookiepolicy: 'single_host_origin'
-                })
-            })
-        }
+    state = {
+        googleReady: false
     }
+    componentWillMount = () => {
+        this.loadGoogle().then(() => this.setState({googleReady: true}))
+    }
+    loadGoogle = (options) => {
+        return new Promise(function(resolve,reject,options){
+            try{    
+                window.gapi.load('auth2', function(){
+                    window.gapi.auth2.init({
+                        client_id: `${google.CLIENT_ID}`,
+                        cookiepolicy: 'single_host_origin'
+                    }).then(() => resolve())
+                })
+            }catch(error){
+                reject()
+            }
+        })
+    }
+    getGeoLocationCoordinates =  (position) => {
+        console.log(position)
+        return {lat: position.coords.latitude, lon: position.coords.longitude}
+      }
     render(){
+       if(this.state.googleReady){
         return(
             <ApolloProvider client={client}>
                 <Query query={IS_LOGGED_IN}> 
@@ -66,11 +83,11 @@ class App extends Component{
                             var decoded = jwtDecode(token)
                             if(decoded.exp < new Date().getTime() / 1000 ){
                                 localStorage.removeItem('token')
-                                var auth2 = window.gapi.auth2.getAuthInstance()
-                                auth2.signOut().then(() => {
-                                })
+                                window.gapi.auth2.getAuthInstance().signOut()
                                 client.resetStore()
-                               }
+                            }else{
+                                client.writeData({data: {userId: decoded.userId}})
+                            }
                         }
                     }
                    
@@ -83,16 +100,17 @@ class App extends Component{
                             <Route path="/signup"  component={SignUp} />
                             <Route path="/buy/:location" component={Buy} />
                             <Route path="/buy" component={Buy} />
-                            {!data.isLoggedIn && (<Redirect from="/sell" to="/" />)}
+                            {!data.isLoggedIn && (<Redirect from="/sell" to="/signup" />)}
                             <Route path="/sell" component={Sell} />
                             <Route path="/rent" component={Rent} />
-                            {!data.isLoggedIn && (<Redirect from="/listrental" to="/" />)}
-                            <Route path="/listrental" component={ListRental} /> 
-                            {!data.isLoggedIn && (<Redirect from="/myaccount" to="/" />)}
+                            <Route path="/listing/:id" component={Listing} />
+                            {!data.isLoggedIn && (<Redirect from="/listrental" to="/signup" />)}
+                            <Route path="/listrental/:type/:id?" component={ListRental} /> 
+                            {!data.isLoggedIn && (<Redirect from="/myaccount" to="/signup" />)}
                             <Route path="/myaccount" component={MyAcoount} />
-                            {!data.isLoggedIn && (<Redirect from="/settings" to="/" />)}
+                            {!data.isLoggedIn && (<Redirect from="/settings" to="/signup" />)}
                             <Route path="/settings" component={Settings} />
-                            {!data.isLoggedIn && (<Redirect from="/settings" to="/" />)}
+                            {!data.isLoggedIn && (<Redirect from="/settings" to="/signup" />)}
                             <Route path="/myproperties" component={Properties} />
                         </Switch>
                     </Router>
@@ -101,6 +119,10 @@ class App extends Component{
                 </Query>
             </ApolloProvider>
         )
+       }else{
+           return<div></div>
+       }
+
     }
 }
 export default App

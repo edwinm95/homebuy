@@ -1,10 +1,49 @@
 import React, {Component, Fragment} from 'react'
+import axios from 'axios'
 class ListRentalPhoto extends Component {
     constructor(props){
         super(props)
         this.state = {
             photos: []
         }
+    }
+    componentDidMount = () => {
+        if(this.props.photos !== null && this.props.photos !== undefined){
+            const {photos, id} = this.props
+            this.convertURLToFile(photos,id)
+            .then(fileArray => {
+                this.setState({photos: fileArray})
+            })
+        }
+    }
+    convertURLToFile = (photos,id) => {
+        return new Promise((resolve,reject) => {
+            var promiseArray = []
+            var count = 0;
+            photos.map(photo => {
+                let promise = new Promise(resolve => {
+                    const url = `http://localhost:5000/images/listing/${id}/${photo}`
+                    count++
+                    this.getFileFromFetch(url)
+                    .then(blob => {
+                        const file = new File([blob], photo)
+                        return resolve(file)
+                    })
+                    
+                })
+                promiseArray.push(promise)
+            })
+            Promise.all(promiseArray).then(outs => {
+                resolve(outs)
+            })
+        })
+    }
+    getFileFromFetch = (url) => {
+        return new Promise ((resolve,reject) => {
+            fetch(url)
+            .then(res => res.blob())
+            .then(blob => resolve(blob))
+        })
     }
     getValue = () => {
         return this.state.photos
@@ -37,8 +76,8 @@ class ListRentalPhoto extends Component {
         }
         var count = 0;
         const mappedArray = this.state.photos.map((photo) => {
-          const photoURL =  URL.createObjectURL(photo)
-          const style = {
+           const photoURL =  URL.createObjectURL(photo)
+           const style = {
             position: 'relative',
             backgroundImage: `url(${photoURL})`,
             backgroundRepeat: 'no-repeat',

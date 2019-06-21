@@ -7,11 +7,23 @@ class Map extends Component {
     componentDidMount(){
         const {lat,lon} = this.props
         if(window.tomtom){
-            window.tomtom.L.map('map', {
+            var map = window.tomtom.L.map('map', {
                 key: tomtom.API,
-                basePath: '../../public/sdk/',
+                basePath: `${process.env.PUBLIC_URL}/sdk`,
                 center: [lat,lon],
                 zoom: 15
+            })
+            var markerOptions = {
+                icon: window.tomtom.L.icon({
+                    iconUrl: process.env.PUBLIC_URL+'/sdk/images/ic_map_poi_013_white.png',
+                    iconSize: [30,34],
+                    iconAnchor: [15,34]
+                })
+
+            }
+            this.props.properties.forEach((property) => {
+                const {lat, lon} = property.address
+                window.tomtom.L.marker([lat,lon]).addTo(map)
             })
         }
         // const script = document.createElement('script')
@@ -37,7 +49,10 @@ class Map extends Component {
     render(){
         const style = {
             width: 600,
-            height: 600
+            height: 500,
+            left: '2%',
+            top: '10%',
+            position: 'absolute'
 
         }
         return(
