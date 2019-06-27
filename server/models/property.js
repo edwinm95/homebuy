@@ -11,7 +11,7 @@ const propertySchema = new Schema({
         required: true,
         default: Date.now()
     },
-    address : {
+    address: {
         streetName: {
             type: String ,
             required: true
@@ -25,13 +25,14 @@ const propertySchema = new Schema({
             required: true
         },
         zipcode: {
-            type: String
+            type: String,
+            required: true
         },
         lat: {
             type: String,
             required: true
         },
-        lon:{
+        lon: {
             type: String,
             required: true
         }

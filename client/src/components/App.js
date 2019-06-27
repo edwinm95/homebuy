@@ -8,8 +8,9 @@ import Sell from './Pages/Sell'
 import Rent from './Pages/Rent'
 import ListRental from './Pages/ListRental/'
 import MyAcoount from './Pages/MyAccount/'
+import Messages from './Pages/Messages'
 import Settings from './Pages/Settings/'
-import Properties from './Pages/Properties'
+import Properties from './Pages/Properties/'
 import Listing from './Pages/Listing'
 import * as actions from '../actions/token'
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
@@ -101,6 +102,8 @@ class App extends Component{
                             <Route path="/sell" component={Sell} />
                             <Route path="/rent/:location?" component={Rent} />
                             <Route path="/listing/:id" component={Listing} />
+                            {!data.isLoggedIn && (<Redirect from="/messages" to="/signup" />)}
+                            <Route path="/messages" component={Messages} />
                             {!data.isLoggedIn && (<Redirect from="/listrental" to="/signup" />)}
                             <Route path="/listrental/:type/:id?" component={ListRental} /> 
                             {!data.isLoggedIn && (<Redirect from="/myaccount" to="/signup" />)}
@@ -108,6 +111,7 @@ class App extends Component{
                             {!data.isLoggedIn && (<Redirect from="/settings" to="/signup" />)}
                             <Route path="/settings" component={Settings} />
                             {!data.isLoggedIn && (<Redirect from="/settings" to="/signup" />)}
+                            {!data.isLoggedIn && (<Redirect from="/myproperties" to="/signup" />)}
                             <Route path="/myproperties" component={Properties} />
                         </Switch>
                     </Router>

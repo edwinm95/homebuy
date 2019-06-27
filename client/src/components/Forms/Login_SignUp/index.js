@@ -298,7 +298,6 @@ const CREATE_USER = gql`
                             <Error>{this.state.error.email.style.text}</Error>
                             <PasswordInput type="password" placeholder='Enter password' ref={this.password} />
                             <SubmitButton disabled={this.state.error.email.showError}>Submit</SubmitButton>
-                            <ForgotPassword>Forgot Password ?</ForgotPassword>
                         </InputComponent>
                     </form>
                     )}

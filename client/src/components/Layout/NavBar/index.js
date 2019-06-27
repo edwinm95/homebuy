@@ -19,14 +19,12 @@ const NavBarComponent = styled.div`
     background-color: #FFFFFF;
 `
 const SubMenuComponent = styled.div`
-position: fixed;
+position: absolute;
 right: 0;
-top: 4.2em;
-border: 0.5px solid #ccc;
-margin: auto;
-width: 20%;
+top 100%;
 background-color: white;
-z-index: 1;
+border: 1px solid #eee;
+z-index: 9999;
 `
 const Links = styled.div`
 margin: 1em;
@@ -60,7 +58,7 @@ const Logo = styled.div`
 const RightLinksComponent = styled.div`
   cursor: pointer;
   display: inline-block;
-  margin: 20px 10px;
+  margin: 20px;
   float: right
   :hover{
     color: green;
@@ -166,22 +164,25 @@ class NavBar extends Component {
     
             <NavBarLinkComponent onMouseLeave={this.hideSubMenu}>
               <RightLinksComponent>
-                {data.isLoggedIn ? (<Link to="/myaccount" onMouseEnter={this.showSubMenu} className="links">{links.my_account.text}</Link>): 
-                    (<a onClick={() => this.showLoginSignupModal()} className="links">{links.login_signup.text}</a>)
-                    }
-                {this.state.showAccountSubMenu && ( 
-              <SubMenuComponent>
-                <Links><Link to ="/myproperties" className="links">My Properties</Link></Links>
-                <Links><Link to="/settings" className="links">Settings</Link></Links>
-                <Links onClick={() => {
-                  this.signout(client)
-                }}>Sign out</Links>
-               </SubMenuComponent>
+                {!data.isLoggedIn  && (<a onClick={() => this.showLoginSignupModal()} className="links">{links.login_signup.text}</a>)} 
+                {data.isLoggedIn && <Link to="/myaccount" onMouseEnter={this.showSubMenu} className="links">{links.my_account.text}</Link>}
+                {this.state.showAccountSubMenu && (
+                <SubMenuComponent>
+                  <Links><Link to ="/myproperties" className="links">My Properties</Link></Links>
+                  <Links><Link to="/settings" className="links">Settings</Link></Links>
+                  <Links><Link className="links" onClick={() => {
+                    this.signout(client)
+                  }}>Sign out</Link></Links>
+                </SubMenuComponent>
                 )} 
               </RightLinksComponent>
               <RightLinksComponent>
-                  {data.isLoggedIn ? (<Link to ="/sell"  className="links">{links.sell.text}</Link>): 
-                  (<Link className="links" onClick={() => this.showLoginSignupModal()} >{links.sell.text}</Link>)
+                  {data.isLoggedIn  && (
+                    <Link to ="/messages"  className="links">
+                      <div className="message"><i class="fas fa-envelope"></i></div>
+                      <div className="notification"></div>
+                    </Link>
+                  )
                   }
               </RightLinksComponent>
               <RightLinksComponent>

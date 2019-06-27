@@ -7,15 +7,25 @@ const messageSchema = new Schema ( {
         required: true,
         default: Date.now()
     },
-    property: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Property',
-        required: true
-    },
     body: {
         type: String,
         required: true,
-    }
+    },
+    creator: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    recepient: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    read: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
 })
 
 module.exports = mongoose.model('Message',messageSchema)

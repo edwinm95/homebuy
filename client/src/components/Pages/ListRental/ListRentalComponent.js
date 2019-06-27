@@ -174,7 +174,6 @@ class ListRentalComponent extends Component {
     renderDetails(){
         const {streetName, city, state, zipcode} = this.state
         const {values} = this.props
-        const squarefeet = `${values.squarefeet}`
 
         return(
         <Field>
@@ -215,7 +214,7 @@ class ListRentalComponent extends Component {
             <FieldComponent>
                 <LabelComponent>
                     <label htmlFor="leaseduration">Square Feet{this.renderRequired()}</label>
-                    <TextInput  value={squarefeet} errorMessages={'Enter Square Feet'}   className={'textinput'} required ref={(ref) => this._refs['squarefeet'] = ref}/>
+                    <TextInput  value={values.squarefeet} errorMessages={'Enter Square Feet'}   className={'textinput'} required ref={(ref) => this._refs['squarefeet'] = ref}/>
                 </LabelComponent>
                 <LabelComponent>
                     <label htmlFor="description">Description{this.renderRequired()}</label>
@@ -414,6 +413,11 @@ class ListRentalComponent extends Component {
                 mutation={CREATE_PROPERTY}
                 errorPolicy="all"
                 onError={(error) => console.log(error)}
+                onCompleted={(data) => {
+                    console.log(data)
+                    const {_id} = data.createProperty
+                    this.setState({redirect: true, _id})
+                }}
                 >
                 {(createProperty, {data}) => {
                     return(
@@ -446,9 +450,9 @@ class ListRentalComponent extends Component {
         if(additionalAmenities.length !== 0){
             propertyInput['additionalamenities'] = additionalAmenities
         }
-        const {address, city, state, zipcode, lat, lon} = this.props.address
+        const {streetName, city, state, zipcode, lat, lon} = this.state
         propertyInput['address'] = {
-            streetName: address,
+            streetName,
             city,
             state,
             zipcode,
@@ -461,20 +465,25 @@ class ListRentalComponent extends Component {
     handleEditProperty = (editProperty) => {
         var propertyInput = {}
         for(var key in fields){
-            propertyInput[key] = this._refs[key].getValue()
+            if(key === 'squarefeet'){
+                var formattedSquareFeet = `${this._refs[key].getValue()}`
+                propertyInput[key] = formattedSquareFeet
+            }else{
+                propertyInput[key] = this._refs[key].getValue()
+            }   
         }
         const {additionalAmenities} = this.state
         if(additionalAmenities.length !== 0){
             propertyInput['additionalamenities'] = additionalAmenities
         }
-        const {streetName, city, state, zipcode, lat, lon} = this.state
+        var {streetName, city, state, zipcode, lat, lon} = this.state
         propertyInput['address'] = {
             streetName,
             city,
             state,
-            zipcode,
             lat,
-            lon
+            lon,
+            zipcode,
         }
         propertyInput['_id'] = this.props.values._id
         console.log(propertyInput)

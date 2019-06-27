@@ -36,21 +36,23 @@ module.exports = buildSchema(`
       }
       type Message {
         _id: ID!
-        timestamp: String!,
-        property: Property!
+        timestamp: String!
         body: String!
+        creator: User!
+        recepient: User!
+        read: Boolean!
 
       }
       type MessageReference {
-        message: ID!
-        to: User!
-        from: User!
+        _id: ID
+        messages: [Message]
+        property: Property
+        recepients: [User]
       }
       type User{
         _id: ID!
         facebookID: String
         googleID: String
-        password: String
         firstname: String
         lastname: String
         username: String
@@ -70,6 +72,7 @@ module.exports = buildSchema(`
         buisnesslinkedin: String
         buisnesswebsite: String
         propertiesOwned: [Property]
+        propertieslikes: [Property]
         dateCreated: String
       }
       type AuthData {
@@ -135,6 +138,8 @@ module.exports = buildSchema(`
           refreshToken: AuthData!
           getUser: User!
           getProperty(propertyID: ID!): Property!
+          getMessage: [MessageReference]
+          getUserProperties: [Property!]!
       }
       type RootMutation {
           login(email: String!, password: String!): AuthData!
@@ -148,6 +153,8 @@ module.exports = buildSchema(`
           addSaves(propertyID: ID!): Boolean
           createMessage(messageInput: MessageInput): Boolean
           editProperty(propertyInput: PropertyInput): Property
+          handleSave(command:String! , propertyID:ID!): Property
+          deleteProperty(propertyID: ID!): Boolean
 
       }
       schema {

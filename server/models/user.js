@@ -48,6 +48,12 @@ const userSchema = new Schema ({
             ref: 'Property'
         }
     ],
+    propertieslikes:[
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Property'
+        }
+    ],
     dateCreated:{
         type: Date,
         default: Date.now()

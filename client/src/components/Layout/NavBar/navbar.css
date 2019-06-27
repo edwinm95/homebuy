@@ -9,7 +9,26 @@ a {
 }
 .links{
     color: black;
+    position: relative;
+    margin: 1em;
 }
 .links:hover{
     color: green;
+}
+.message{
+    font-size: 1em;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding-right: 0.3em;
+}
+.notification{
+    background-color: red;
+    color: white;
+    height: 0.5em;
+    width: 0.5em;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    right: 5%;
 }

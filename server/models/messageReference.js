@@ -1,27 +1,36 @@
 const mongoose = require('mongoose')
+const User = require('./user')
 const {Schema} = mongoose
-
 const messageReferenceSchema = new Schema ({
-    message: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Message',
-        required: true
+    messages: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Message'
+        }
+    ],
+    property:{
+        type: Schema.Types.ObjectId,
+        ref: 'Property'
     },
-    to: {
-        type: mongoose.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    from: {
-        type: mongoose.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    read:{
-        type: Boolean,
-        required: true,
-        default: false
-    }
+    recepients: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ]
 })
+messageReferenceSchema.statics.findByUser = function(id, callback){
+    try{
+        const query = this.find()
+        User.findById(id, function(error, user){
+            query.where({recepients: user._id}).exec(callback)
+        })
+        return query
+    }catch(error){
+        console.log(error)
+        throw error
+    }
+}
+
 
 module.exports = mongoose.model('MessageReference',messageReferenceSchema)

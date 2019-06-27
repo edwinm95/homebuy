@@ -11,7 +11,8 @@ class Listing extends Component {
         property: null,
         renderLogin: false,
         renderMessage: false,
-        editlisting: false
+        editlisting: false,
+        saves: []
     }
     componentDidMount = async () => {
         const ipAddress = await publicIp.v4()
@@ -32,6 +33,7 @@ class Listing extends Component {
                     views
                     description
                     createdBy
+                    saves
                 }
             } 
             `
@@ -46,7 +48,9 @@ class Listing extends Component {
             }
         )
         const responseData = await response.json()
-        this.setState({property: responseData.data.addViews})
+        console.log(responseData)
+        const {saves} = responseData.data.addViews
+        this.setState({property: responseData.data.addViews, saves})
         if(this.props.modal){
             window.addEventListener("click",this.handleEvent,false)
         }
@@ -95,9 +99,68 @@ class Listing extends Component {
         }
         this.setState({renderLogin: renderLogin, renderMessage: renderMessage})
     }
-    renderListingFields = (property,userId,data) => {
-        const {rent, beds, baths, squarefeet, date, _id, photos, views, description, createdBy} = property
-        const {streetName, city, state} = property.address
+    renderPhotos = (photos,_id) => {
+        if(photos.length > 1){
+            var array = []
+            for(var i = 1; i < photos.length; i++){
+                array.push(
+                    <div className="listingotherphotos">
+                        <img className="listingimage" src={`http://localhost:5000/images/listing/${_id}/${photos[i]}`}></img>
+                    </div>
+                    )
+            }
+            return array
+        }else{
+            return <div></div>
+        }
+    }
+    handleSave = async (command,client) => {
+        const {isLoggedIn} = client.cache.data.data.ROOT_QUERY
+        const {_id} = this.state.property
+        if(!isLoggedIn){
+            this.setState({renderLogin: true})
+        }else{
+            const requestBody = {
+                query : `
+                    mutation {
+                        handleSave(command: "${command}" , propertyID: "${_id}"){
+                            saves
+                        }
+                    }
+                `
+            }
+            const url = 'http://localhost:5000/graphql'
+            const response = await fetch(url,{
+                method: 'POST',
+                body: JSON.stringify(requestBody),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            const responseData = await response.json()
+            const {saves} = responseData.data.handleSave
+            console.log(saves)
+            this.setState({saves})
+        }
+    }
+    renderSaves = (userId,saves,client) => {
+        if(userId !== null){
+            if(saves.indexOf(userId) !==  -1){
+                return(
+                    <i class="fas fa-heart" onClick={() => this.handleSave('unlike',client)}></i>
+                )
+            }
+        }
+        return(
+            <i class="far fa-heart" onClick={() => this.handleSave('like',client)}></i>
+        )
+            
+    }
+    renderListingFields = (property,userId,data,client) => {
+        const {rent, beds, baths, squarefeet, date, _id, photos, views, description, createdBy,} = property
+        const {streetName, city, state, zipcode} = property.address
+        const {saves} = this.state
         var intDate = parseInt(date,10)
         var newDate = new Date(intDate)
         return(
@@ -116,9 +179,14 @@ class Listing extends Component {
                             <div className="lisitinghousesqft">
                                 {`${squarefeet} sqft`}
                             </div>
+                            <div className="listingsaves">
+                                <div className="listingsavesicon">
+                                    {this.renderSaves(userId,saves,client)}
+                                </div>{saves.length}
+                            </div>
                         </div>
                         <div className="listinghouseaddress">
-                            {`${streetName}, ${city}, ${state}`}
+                            {`${streetName}, ${city}, ${state} ${zipcode}`}
                         </div>
                         {userId === createdBy ? (<button className="listingeditbutton" onClick={() => {
                             this.handleEditListing()
@@ -137,9 +205,6 @@ class Listing extends Component {
                             <div className="listingviews">
                                 Views:<div style={{fontWeight: 'bold', display: 'inline'}}>&nbsp;{views.length}</div>
                             </div>
-                            <div className="listingsaves">
-                                Saves
-                            </div>
                         </div>
                         <div className="listingdescription">
                             {description}
@@ -149,34 +214,29 @@ class Listing extends Component {
                         <div className="listingmainphoto">
                             <img className="listingimage" src={`http://localhost:5000/images/listing/${_id}/${photos[0]}`}></img>
                         </div>
-                        <div className="listingotherphotos">
-                            <img className="listingimage" src={`http://localhost:5000/images/listing/${_id}/${photos[0]}`}></img>
-                        </div>
-                        <div className="listingotherphotos">
-                            <img className="listingimage" src={`http://localhost:5000/images/listing/${_id}/${photos[0]}`}></img>
-                        </div>
+                        {this.renderPhotos(photos,_id)}
                     </div>
                 </Fragment>
         )
     }
-    renderModal = (property,userId,data) => {
+    renderModal = (property,userId,data,client) => {
         return(
                 <div className="listingmodalbackground" ref={(ref) => this.background = ref}>
                     {this.renderLogin()}
                     {this.renderMessage()}
                     <div className="listingmodalContent">
-                        {this.renderListingFields(property,userId,data)}
+                        {this.renderListingFields(property,userId,data,client)}
                     </div>
                 </div>
         )
     }
-    renderPage = (property,userId,data) => {
+    renderPage = (property,userId,data,client) => {
         return(
             <div>
                 {this.renderLogin()}
                 {this.renderMessage()}
                 <div className="lisitingmaincontainer">
-                    {this.renderListingFields(property,userId,data)}
+                    {this.renderListingFields(property,userId,data,client)}
                 </div>
             </div>
         )
@@ -195,13 +255,13 @@ class Listing extends Component {
                     if(this.props.modal){
                         return(
                             <Fragment>
-                                {this.renderModal(property,userId,data)}
+                                {this.renderModal(property,userId,data,client)}
                             </Fragment>
                         )
                     }else{
                         return(
                             <Fragment>
-                                {this.renderPage(property,userId)}
+                                {this.renderPage(property,userId,data,client)}
                             </Fragment>
                         )
                     }

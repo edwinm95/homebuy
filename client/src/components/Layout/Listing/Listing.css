@@ -164,7 +164,25 @@
     margin-bottom: 0.5em;
 }
 .listingsaves{
-    margin-bottom: 0.5em;
+    display: inline;
+    padding: 0 5px;
+    margin-right: 1em;
+}
+.listingsavesicon{
+    display: inline-block;
+    color: #E31B23;
+    font-size: 1.5em;
+    padding: 0 5px;
+    cursor: pointer;
+    transition: font-size 2s;
+    -moz-transition: font-size 2s;
+    -webkit-transition: font-size 0.5s;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+:hover.listingsavesicon{
+    font-size: 1.7em
 }
 .listingphotos{
     width: 60%;

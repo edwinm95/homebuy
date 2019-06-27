@@ -1,5 +1,6 @@
 const Property = require('../../models/property')
 const User = require('../../models/user')
+const MessageReference = require('../../models/messageReference')
 const { GraphQLUpload } = require('graphql-upload')
 var pick = require('lodash.pick')
 const fs = require('fs')
@@ -54,7 +55,95 @@ module.exports = {
             console.log(error)
             throw error
         }
-        },
+    },
+    deleteProperty: async (args,req) => {
+        try{
+            if(req.isAuth){
+                const {propertyID} = args
+                Property.findOneAndRemove({_id: propertyID})
+                .exec((err,removed) => {
+                    User.findOneAndUpdate(
+                        {_id: req.userId},
+                        { $pull: {propertiesOwned: propertyID, propertieslikes: propertyID} },
+                        {new: true},
+                        (error, removedFromUser) => {
+                            if(error){
+                                throw new Error('Error deleting Property')
+                            }
+                            MessageReference.remove({property: propertyID}).exec((err,res) =>{
+                                if(err){
+                                    throw new Error('Erro deleting Message Reference')
+                                }
+                                return true
+                            })
+                        })
+                })
+            }else{
+                throw new Error('User not authenticated')
+            }
+        }catch(error){
+            throw error
+        }
+    },
+    getUserProperties: async (args,req) => {
+       try{ 
+           if(req.isAuth){
+                const {userId} = req
+                const user = await User.findById(userId)
+                console.log(user)
+                return user.propertiesOwned
+           }else{
+               throw new Error('User not authenticated')
+           }
+
+       }catch(error){
+           console.log(error)
+           throw error
+       }
+    },
+    handleSave: async (args,req) => {
+        try{
+            if(req.isAuth){
+                console.log(args)
+                const {command, propertyID} = args
+                const property = await Property.findById(propertyID)
+                if(property){
+                    const userId = req.userId
+                    const user = await User.findById(userId)
+                    console.log(user.propertieslikes)
+                    if(command === 'like'){
+                        if(property.saves.indexOf(user) === -1){
+                            property.saves.push(user)
+                            user.propertieslikes.push(property)
+                        }
+                    }else if(command === 'unlike'){
+                        if(property.saves.indexOf(userId) !== -1){
+                            property.saves.splice(user,1)
+                            user.propertieslikes.splice(property,1)
+                        }
+                    }
+                    const userSaved = await user.save()
+                    if(userSaved){
+                        const result = await property.save()
+                        if(result){
+                            return result
+                        }else{
+                            throw new Error('Unable to Save Property')
+                        }
+                    }else{
+                        throw new Error('Unable to Save User')
+                    }
+                }else{
+                    throw new Error('Error finding property')
+                }
+            }else{
+                throw new Error('User not authenticated')
+            }
+        }catch(error){
+            console.log(error)
+            throw error
+        }
+    },
     getProperty: async (args,req) => {
         try{
             if(req.isAuth){
@@ -74,6 +163,7 @@ module.exports = {
             if(req.isAuth){
                 const {_id} = args.propertyInput
                 const property = await Property.findById(_id)
+                const user = await User.findById(req.userId)
                 if(property){
                     var propertyResults = pick(
                         args.propertyInput,
@@ -134,16 +224,10 @@ module.exports = {
                         }
                         throw new Error('Photos not uploaded')
                     }
-                    // if(removePhotoArray.length > 0){
-                    //     const filesDeleted = RemoveFiles(removePhotoArray,dir)
-                    //     if(!filesDeleted){
-                    //         throw new Error('error deleting file')
-                    //     }
-                    // }   
                     property.photos = photofilename
-                    const result = await property.save()
-                    if(result){
-                        return result
+                    const propertySaved = await property.save()
+                    if(propertySaved){
+                        return propertySaved;
                     }else{
                          throw new Error('Unable to Save property')
                     }
@@ -260,7 +344,13 @@ module.exports = {
                     console.log(property)
                     const result = await property.save()
                     if(result){
-                        return result
+                            user.propertiesOwned.push(result)
+                            const userSaved = await user.save()
+                            if(userSaved){
+                                return result
+                            }else{
+                                throw new Error('Unable to Save User')
+                            }
                     }else{
                        throw new Error('Unable to save property')
                     }
