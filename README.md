@@ -31,5 +31,13 @@ The webapplication has messaging system which allows user to contact other users
 <img width="1440" alt="Screen Shot 2019-06-28 at 8 49 44 AM" src="https://user-images.githubusercontent.com/45742905/60343333-bcdde380-9981-11e9-973e-4e8187315e0d.png">
 
 
+## Technologies
+  * React (Client Side)
+  * Node js (Server Side)
+  * GraphQL (Query Language)
+  * JWT (Session Tokens) 
+  
 ## What I Learned
+
+I learned how to intergrate GraphQL to my application to be able to retrieve data from the server and to the client. I also learned how to use Session Tokens rather than Cookies. Session Tokens allowed me to see if the user is still logged in and grants access to pages only for users 
 
