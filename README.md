@@ -1,4 +1,4 @@
-# HomeBuy
+# <span style="color:green">some **HomeBuy** text</span>
 
 HomeBuy is a web application that allows consumers to see and post rental properties. 
 
