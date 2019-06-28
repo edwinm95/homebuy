@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"cd client && npm run start\" \"cd server && npm run start\" ",
-    "heroku-postbuild": "NPM_PRODUCTION=false npm install --prefix client && npm run build --prefix client &&  npm install --prefix server && npm run build --prefix server"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client &&  npm install --prefix server && npm run build --prefix server"
 },
   "author": "",
   "license": "ISC",
