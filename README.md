@@ -12,5 +12,11 @@ The web application gives the user the two option to login. One option is the tr
 
 <img width="1437" alt="Screen Shot 2019-06-28 at 8 31 11 AM" src="https://user-images.githubusercontent.com/45742905/60342308-20b2dd00-997f-11e9-93ee-543552048b1c.png">
 
+# Interactive TomTom 2D Map
+
+The web application contains an interactive 2D map that shows rental properties that are avaliable in the area. 
+
+
+
 ## What I Learned
 
