@@ -18,5 +18,18 @@ The web application contains an interactive 2D map that shows rental properties 
 
 <img width="1440" alt="Screen Shot 2019-06-28 at 8 41 46 AM" src="https://user-images.githubusercontent.com/45742905/60342880-adaa6600-9980-11e9-9751-5560b04cdfb5.png">
 
+# Responsive Layout
+
+The web application is responsive to any devices from Mobile to Desktop Computers
+
+<img width="463" alt="Screen Shot 2019-06-28 at 8 46 42 AM" src="https://user-images.githubusercontent.com/45742905/60343141-4fca4e00-9981-11e9-979a-3aa8e13d7f8a.png">
+
+# Messaging System
+
+The webapplication has messaging system which allows user to contact other users regarding a rental. 
+
+<img width="1440" alt="Screen Shot 2019-06-28 at 8 49 44 AM" src="https://user-images.githubusercontent.com/45742905/60343333-bcdde380-9981-11e9-973e-4e8187315e0d.png">
+
+
 ## What I Learned
 
