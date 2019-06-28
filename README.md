@@ -16,7 +16,7 @@ The web application gives the user the two option to login. One option is the tr
 
 The web application contains an interactive 2D map that shows rental properties that are avaliable in the area. 
 
-
+<img width="1440" alt="Screen Shot 2019-06-28 at 8 41 46 AM" src="https://user-images.githubusercontent.com/45742905/60342880-adaa6600-9980-11e9-9751-5560b04cdfb5.png">
 
 ## What I Learned
 
