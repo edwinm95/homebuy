@@ -6,6 +6,11 @@ HomeBuy is a web application that allows consumers to see rental properties that
 
 ## Features
 
+# Google OAuth Login
+
+The web application gives the user the two option to login. One option is the traditional way which is Email and password. The second option is via Google. The user clicks on Google button and is redirected to google to complete the login procedure. 
+
+<img width="1437" alt="Screen Shot 2019-06-28 at 8 31 11 AM" src="https://user-images.githubusercontent.com/45742905/60342308-20b2dd00-997f-11e9-93ee-543552048b1c.png">
 
 ## What I Learned
 
