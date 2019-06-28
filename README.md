@@ -2,6 +2,9 @@
 
 HomeBuy is a web application that allows consumers to see and post rental properties. 
 
+<img width="1440" alt="Screen Shot 2019-06-28 at 8 06 14 AM" src="https://user-images.githubusercontent.com/45742905/60341201-c1070280-997b-11e9-848c-70bc849ed914.png">
+
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
