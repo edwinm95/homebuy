@@ -36,6 +36,7 @@ The webapplication has messaging system which allows user to contact other users
   * Node js (Server Side)
   * GraphQL (Query Language)
   * JWT (Session Tokens) 
+  * TomTom API 
   
 ## What I Learned
 
